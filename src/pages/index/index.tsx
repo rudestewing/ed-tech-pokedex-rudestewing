@@ -5,7 +5,7 @@ import { TFilter } from './type';
 import Filter from './components/Filter';
 import PokemonCard from '../../commons/components/PokemonCard';
 import { TPokemonItem, TPokemonList } from '../../commons/types';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Button } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
 import { getValueFromQueryString } from '../../commons/helpers';
@@ -202,7 +202,7 @@ const IndexPage: React.FC = () => {
           />
         </div>
       </div>
-      <div className="pt-[68px] pb-4 ">
+      <div className="pt-[68px] pb-4 px-3">
         {(queryPokemons.isLoading || queryPokemons.isFetching) && (
           <div>Loading Pokemon</div>
         )}
