@@ -1,4 +1,6 @@
-export const POKEMON_TYPE_COLOR = {
+import { TObject } from '../types';
+
+export const POKEMON_TYPE_COLOR: { [key: string]: string } = {
   normal: '#A8A878',
   fire: '#F08030',
   fighting: '#C03028',

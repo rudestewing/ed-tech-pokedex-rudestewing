@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import Routes from './routes';
 
+import 'antd/dist/antd.css';
 import './styles/index.scss';
 
 const queryClient = new QueryClient({

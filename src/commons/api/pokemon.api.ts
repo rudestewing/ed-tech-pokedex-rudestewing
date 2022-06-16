@@ -19,6 +19,7 @@ export const fetchPokemonsApi = async (
       species: pokemon_v2_pokemonspecies(
         limit: ${limit},
         offset: ${offset},
+        order_by: {id: asc},
         where: {
           pokemon_v2_pokemons: {
             pokemon_v2_pokemontypes: {
@@ -38,8 +39,6 @@ export const fetchPokemonsApi = async (
         name
         id
         pokemons: pokemon_v2_pokemons {
-          name
-          id
           types: pokemon_v2_pokemontypes {
             type: pokemon_v2_type {
               name
@@ -47,7 +46,7 @@ export const fetchPokemonsApi = async (
             }
           }
         }
-        pokemon_v2_generation {
+        generation: pokemon_v2_generation {
           id
           name
         }

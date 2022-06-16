@@ -3,16 +3,13 @@ import { useInfiniteQuery, useQuery, useQueryClient } from 'react-query';
 import { getAllGenerationsApi } from '../../commons/api/generations.api';
 import { fetchPokemonsApi } from '../../commons/api/pokemon.api';
 import { getAllTypesApi } from '../../commons/api/types.api';
+import { Row, Col, Drawer } from 'antd';
+import { TFilter } from './type';
+import Filter from './components/Filter';
+import PokemonCard from '../../commons/components/PokemonCard';
 
 const queryKeys = {
   pokemons: 'pokemons',
-  types: 'types',
-  generations: 'generations',
-};
-
-type TFilter = {
-  typeIds: number[];
-  generationIds: number[];
 };
 
 const limit = 20;
@@ -25,19 +22,10 @@ const IndexPage: React.FC = () => {
     generationIds: [],
   });
 
+  const [isShowFilter, setIsShowFilter] = useState<boolean>(false);
+
   const [data, setData] = useState<any[]>([]);
-
-  const queryTypes = useQuery(queryKeys.types, () => getAllTypesApi(), {
-    initialData: [],
-  });
-
-  const queryGenerations = useQuery(
-    queryKeys.generations,
-    () => getAllGenerationsApi(),
-    {
-      initialData: [],
-    }
-  );
+  const [isBottom, setIsBottom] = useState<boolean>(false);
 
   const queryPokemons = useInfiniteQuery(
     queryKeys.pokemons,
@@ -51,13 +39,33 @@ const IndexPage: React.FC = () => {
     {
       enabled: false,
       onSuccess: (result: any) => {
-        console.log('onSuccess', result);
+        const allPageData: any[] = [].concat(...result?.pages);
+        setData(allPageData);
       },
       onError: (error: any) => {
         console.log('onError', error);
       },
+      getNextPageParam: (lastPage: any, allPages: any) => {
+        if (limit) {
+          const hasNext = limit <= lastPage.length;
+          return hasNext ? allPages?.length * limit : undefined;
+        }
+
+        return undefined;
+      },
     }
   );
+
+  const loadMore = () => {
+    if (
+      queryPokemons.hasNextPage &&
+      !queryPokemons.isLoading &&
+      !queryPokemons.isFetching &&
+      !queryPokemons.isFetchingNextPage
+    ) {
+      queryPokemons.fetchNextPage();
+    }
+  };
 
   useEffect(() => {
     queryClient.removeQueries(queryKeys.pokemons, { exact: true });
@@ -65,15 +73,72 @@ const IndexPage: React.FC = () => {
     queryPokemons.refetch();
   }, [filter]);
 
+  const handleScrollDOM = () => {
+    console.log(
+      'handleSCrollDOM',
+      window.innerHeight,
+      window.scrollY,
+      window.document.body.scrollHeight
+    );
+
+    if (
+      window.innerHeight + window.scrollY ===
+      window.document.body.scrollHeight
+    ) {
+      setIsBottom(true);
+    } else {
+      setIsBottom(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScrollDOM);
+
+    return () => {
+      window.removeEventListener('scroll', handleScrollDOM);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isBottom) {
+      loadMore();
+    }
+  }, [isBottom]);
+
   return (
-    <div>
-      {queryTypes.data.map((type: any) => {
-        return <div key={type.id}>{type.name}</div>;
-      })}
-      {queryGenerations.data.map((generation: any) => {
-        return <div key={generation.id}>{generation.names[0].name}</div>;
-      })}
-    </div>
+    <>
+      <div className="pokemon-list">
+        <Row gutter={[18, 18]}>
+          {data.map((pokemon: any) => {
+            return (
+              <Col xs={12} md={8} key={pokemon.id}>
+                <PokemonCard
+                  id={pokemon.id}
+                  name={pokemon.name}
+                  types={pokemon.pokemons[0]?.types || []}
+                />
+              </Col>
+            );
+          })}
+          {queryPokemons.isFetchingNextPage && (
+            <Col span={24}>
+              <div className="flex justify-center">Loading More Pokemon</div>
+            </Col>
+          )}
+        </Row>
+      </div>
+      <Filter
+        visible={isShowFilter}
+        data={filter}
+        onApply={(data) => {
+          setFilter((state) => ({
+            ...state,
+            ...data,
+          }));
+        }}
+        onClose={() => setIsShowFilter(false)}
+      />
+    </>
   );
 };
 
