@@ -35,7 +35,7 @@ const Filter: React.FC<TProps> = ({ visible, data, onApply, onClose }) => {
 
   useEffect(() => {
     setFilter(data);
-  }, [data]);
+  }, [data, visible]);
 
   const handleApply = () => {
     onApply(filter);
