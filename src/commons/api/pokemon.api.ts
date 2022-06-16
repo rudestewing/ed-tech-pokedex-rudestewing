@@ -87,6 +87,106 @@ export const getPokemonDetailApi = async (
   name: string
 ): Promise<TPokemonDetail | null> => {
   try {
+    const fakePokemonDetail = {
+      id: 1,
+      name: 'bulbasaur',
+      shortDescription:
+        'A strange seed was\nplanted on its\nback at birth.\fThe plant sprouts\nand grows with\nthis POKéMON.',
+      height: 7,
+      weight: 69,
+      types: [
+        {
+          id: 12,
+          name: 'grass',
+        },
+        {
+          id: 4,
+          name: 'poison',
+        },
+      ],
+      stats: [
+        {
+          name: 'hp',
+          baseStat: 45,
+        },
+        {
+          name: 'attack',
+          baseStat: 49,
+        },
+        {
+          name: 'defense',
+          baseStat: 49,
+        },
+        {
+          name: 'special-attack',
+          baseStat: 65,
+        },
+        {
+          name: 'special-defense',
+          baseStat: 65,
+        },
+        {
+          name: 'speed',
+          baseStat: 45,
+        },
+      ],
+      abilities: [
+        {
+          name: 'overgrow',
+          shortEffect:
+            'Strengthens grass moves to inflict 1.5× damage at 1/3 max HP or less.',
+        },
+        {
+          name: 'chlorophyll',
+          shortEffect: 'Doubles Speed during strong sunlight.',
+        },
+      ],
+      evolutions: [
+        {
+          id: 1,
+          name: 'bulbasaur',
+          types: [
+            {
+              id: 12,
+              name: 'grass',
+            },
+            {
+              id: 4,
+              name: 'poison',
+            },
+          ],
+        },
+        {
+          id: 2,
+          name: 'ivysaur',
+          types: [
+            {
+              id: 12,
+              name: 'grass',
+            },
+            {
+              id: 4,
+              name: 'poison',
+            },
+          ],
+        },
+        {
+          id: 3,
+          name: 'venusaur',
+          types: [
+            {
+              id: 12,
+              name: 'grass',
+            },
+            {
+              id: 4,
+              name: 'poison',
+            },
+          ],
+        },
+      ],
+    };
+    // return fakePokemonDetail;
     const query = `
     query {
       species: pokemon_v2_pokemonspecies(where: {name: {_eq: "${name}"}}) {
@@ -125,6 +225,7 @@ export const getPokemonDetailApi = async (
         }
         evolutions: pokemon_v2_evolutionchain {
           species: pokemon_v2_pokemonspecies {
+            evolvesFromSpeciesId: evolves_from_species_id
             name
             id
             pokemons: pokemon_v2_pokemons {
