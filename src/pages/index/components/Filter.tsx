@@ -35,7 +35,7 @@ const Filter: React.FC<TProps> = ({ visible, data, onApply, onClose }) => {
 
   useEffect(() => {
     setFilter(data);
-  }, [data]);
+  }, [data, visible]);
 
   const handleApply = () => {
     onApply(filter);
@@ -62,35 +62,38 @@ const Filter: React.FC<TProps> = ({ visible, data, onApply, onClose }) => {
       onClose={onClose}
       width="100%"
       closable={false}
+      height={'100%'}
     >
       <div className="max-w-screen-md flex flex-col justify-between gap-2 mx-auto h-full">
-        <h3 className="text-lg font-semibold">Filter</h3>
         <div className="flex flex-col gap-2">
-          <div>
-            <h5 className="text-md font-semibold">Type</h5>
-            <Checkbox.Group
-              options={optionsTypes}
-              onChange={(e) => {
-                setFilter((state) => ({
-                  ...state,
-                  typeIds: e.map((item) => Number(item)),
-                }));
-              }}
-              value={filter.typeIds.map((item) => String(item))}
-            />
-          </div>
-          <div>
-            <h5 className="text-md font-semibold">Generation</h5>
-            <Checkbox.Group
-              options={optionsGenerations}
-              onChange={(e) => {
-                setFilter((state) => ({
-                  ...state,
-                  generationIds: e.map((item) => Number(item)),
-                }));
-              }}
-              value={filter.generationIds.map((item) => String(item))}
-            />
+          <h3 className="text-lg font-semibold">Filter</h3>
+          <div className="flex flex-col gap-3">
+            <div>
+              <h5 className="text-md font-semibold">Type</h5>
+              <Checkbox.Group
+                options={optionsTypes}
+                onChange={(e) => {
+                  setFilter((state) => ({
+                    ...state,
+                    typeIds: e.map((item) => Number(item)),
+                  }));
+                }}
+                value={filter.typeIds.map((item) => String(item))}
+              />
+            </div>
+            <div>
+              <h5 className="text-md font-semibold">Generation</h5>
+              <Checkbox.Group
+                options={optionsGenerations}
+                onChange={(e) => {
+                  setFilter((state) => ({
+                    ...state,
+                    generationIds: e.map((item) => Number(item)),
+                  }));
+                }}
+                value={filter.generationIds.map((item) => String(item))}
+              />
+            </div>
           </div>
         </div>
         <div className="flex justify-end gap-2">
@@ -109,7 +112,11 @@ const Filter: React.FC<TProps> = ({ visible, data, onApply, onClose }) => {
           >
             Reset
           </Button>
-          <Button type="primary" onClick={handleApply}>
+          <Button
+            type="primary"
+            onClick={handleApply}
+            disabled={JSON.stringify(filter) === JSON.stringify(data)}
+          >
             Apply
           </Button>
         </div>

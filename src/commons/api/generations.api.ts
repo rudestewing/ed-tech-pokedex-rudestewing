@@ -15,7 +15,12 @@ export const getAllGenerationsApi = async (): Promise<TGeneration[]> => {
     }
     `;
     const response = await graphQL(query);
-    return Promise.resolve(response.data?.data?.generations || []);
+
+    const data = (response.data?.data?.generations || []).map(
+      ({ id, name, names }: any) => ({ id, name: names[0]?.name || name })
+    );
+
+    return Promise.resolve(data);
   } catch (error: any) {
     return Promise.reject(error);
   }
