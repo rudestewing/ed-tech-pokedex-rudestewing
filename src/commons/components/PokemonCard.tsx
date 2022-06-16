@@ -31,15 +31,16 @@ const PokemonCard: React.FC<TProps> = ({
         backgroundColor: getBackgroundColorFromTypeName(
           types[0]?.name || 'normal'
         ),
+        transform: `scale(${selectMode && selected ? '0.9' : '1'})`,
       }}
     >
       {selectMode && (
-        <div className="absolute top-0 right-0 text-blue-600">
+        <div className="absolute top-0 right-0 text-indigo-500">
           {selected ? (
-            <CheckCircleIcon style={{ ...STYLE_FILL_CURRENT, fontSize: 48 }} />
+            <CheckCircleIcon style={{ ...STYLE_FILL_CURRENT, fontSize: 45 }} />
           ) : (
             <RadioButtonUncheckedIcon
-              style={{ ...STYLE_FILL_CURRENT, fontSize: 48 }}
+              style={{ ...STYLE_FILL_CURRENT, fontSize: 45 }}
             />
           )}
         </div>

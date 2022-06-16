@@ -10,6 +10,7 @@ import { Button } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
 import { getValueFromQueryString } from '../../commons/helpers';
 import useUpdateQueryStringFromObjectChange from '../../commons/hooks/useUpdateQueryStringFromObjectChange';
+import FloatingSelectedPokemonToCompare from './components/FloatingSelectedPokemon';
 
 const queryKeys = {
   pokemons: 'pokemons',
@@ -90,6 +91,7 @@ const IndexPage: React.FC = () => {
   );
 
   const refetchData = () => {
+    window.scrollTo(0, 0);
     setData([]);
     queryClient.removeQueries(queryKeys.pokemons, { exact: true });
     queryClient.cancelQueries(queryKeys.pokemons);
@@ -166,26 +168,28 @@ const IndexPage: React.FC = () => {
     }
   };
 
+  const handleSelectToCompare = (condition: boolean) => {
+    setIsSelectToCompare(condition);
+    if (condition === false) {
+      setSelectedPokemonIds([]);
+      setSelectedPokemons([]);
+    }
+  };
+
   return (
     <>
       <div className="fixed h-[64px] flex justify-end items-center gap-2 flex-wrap left-0 right-0 max-w-screen-md mx-auto px-3 z-20">
         <div>
           {isSelectToCompare ? (
             <Button
-              onClick={() => {
-                setIsSelectToCompare(false);
-              }}
+              onClick={() => handleSelectToCompare(false)}
               danger
               type="primary"
             >
               Cancel compare
             </Button>
           ) : (
-            <Button
-              onClick={() => {
-                setIsSelectToCompare(true);
-              }}
-            >
+            <Button onClick={() => handleSelectToCompare(true)}>
               Select to compare
             </Button>
           )}
@@ -237,6 +241,9 @@ const IndexPage: React.FC = () => {
         }}
         onClose={() => setIsShowFilter(false)}
       />
+      {isSelectToCompare && selectedPokemons.length > 0 && (
+        <FloatingSelectedPokemonToCompare data={selectedPokemons} />
+      )}
     </>
   );
 };

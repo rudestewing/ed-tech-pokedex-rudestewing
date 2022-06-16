@@ -112,7 +112,11 @@ const Filter: React.FC<TProps> = ({ visible, data, onApply, onClose }) => {
           >
             Reset
           </Button>
-          <Button type="primary" onClick={handleApply}>
+          <Button
+            type="primary"
+            onClick={handleApply}
+            disabled={JSON.stringify(filter) === JSON.stringify(data)}
+          >
             Apply
           </Button>
         </div>
