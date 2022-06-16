@@ -12,6 +12,7 @@ type TFetchPokemonApi = {
 export const fetchPokemonsApi = async (
   props: TFetchPokemonApi
 ): Promise<TPokemonList> => {
+  console.log('filter', props.filter);
   try {
     const { limit, offset, filter } = props;
 
@@ -32,6 +33,15 @@ export const fetchPokemonsApi = async (
                       : ''
                   }
                 }
+              }
+            }
+          },
+          pokemon_v2_generation: {
+            id: {
+              ${
+                filter.generationIds.length > 0
+                  ? `_in: [${filter.generationIds.join(',')}]`
+                  : ''
               }
             }
           }

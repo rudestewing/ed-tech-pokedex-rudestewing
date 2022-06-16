@@ -1,6 +1,7 @@
 import { graphQL } from '../helpers/http-request';
+import { TPokemonType } from '../types';
 
-export const getAllTypesApi = async (): Promise<any> => {
+export const getAllTypesApi = async (): Promise<TPokemonType[]> => {
   try {
     const query = `
     query {
@@ -10,8 +11,12 @@ export const getAllTypesApi = async (): Promise<any> => {
       }
     }
     `;
+
     const response = await graphQL(query);
-    return Promise.resolve(response.data?.data?.types || []);
+    const data = (response.data?.data?.types || []).map(
+      ({ id, name }: any) => ({ id, name })
+    );
+    return Promise.resolve(data);
   } catch (error: any) {
     return Promise.reject(error);
   }

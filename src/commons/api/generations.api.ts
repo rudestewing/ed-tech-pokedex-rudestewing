@@ -1,6 +1,7 @@
 import { graphQL } from '../helpers/http-request';
+import { TGeneration } from '../types';
 
-export const getAllGenerationsApi = async (): Promise<any> => {
+export const getAllGenerationsApi = async (): Promise<TGeneration[]> => {
   try {
     const query = `
     query {

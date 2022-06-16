@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { fetchPokemonsApi } from '../../commons/api/pokemon.api';
-import { Row, Col } from 'antd';
 import { TFilter } from './type';
 import Filter from './components/Filter';
 import PokemonCard from '../../commons/components/PokemonCard';
 import { TPokemonItem, TPokemonList } from '../../commons/types';
 import { Link } from 'react-router-dom';
+import { Button } from 'antd';
+import { FilterOutlined } from '@ant-design/icons';
 
 const queryKeys = {
   pokemons: 'pokemons',
@@ -56,21 +57,15 @@ const IndexPage: React.FC = () => {
     }
   );
 
-  const loadMore = () => {
-    if (
-      queryPokemons.hasNextPage &&
-      !queryPokemons.isLoading &&
-      !queryPokemons.isFetching &&
-      !queryPokemons.isFetchingNextPage
-    ) {
-      queryPokemons.fetchNextPage();
-    }
-  };
-
-  useEffect(() => {
+  const refetchData = () => {
+    setData([]);
     queryClient.removeQueries(queryKeys.pokemons, { exact: true });
     queryClient.cancelQueries(queryKeys.pokemons);
     queryPokemons.refetch();
+  };
+
+  useEffect(() => {
+    refetchData();
   }, [filter]);
 
   const handleScrollDOM = () => {
@@ -92,9 +87,8 @@ const IndexPage: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => {
+  const loadMore = useCallback(() => {
     if (
-      isBottom &&
       queryPokemons.hasNextPage &&
       !queryPokemons.isLoading &&
       !queryPokemons.isFetching &&
@@ -102,33 +96,55 @@ const IndexPage: React.FC = () => {
     ) {
       queryPokemons.fetchNextPage();
     }
-  }, [isBottom, queryPokemons]);
+  }, [queryPokemons]);
+
+  useEffect(() => {
+    if (isBottom) {
+      loadMore();
+    }
+  }, [isBottom]);
+
+  const hasFilter = useMemo<boolean>(() => {
+    return filter.typeIds.length > 0 || filter.generationIds.length > 0;
+  }, [filter]);
 
   return (
     <>
-      <div className="pokemon-list">
-        <Row gutter={[18, 18]}>
+      <div className="fixed h-[64px] flex justify-end items-center gap-2 flex-wrap left-0 right-0 max-w-screen-md mx-auto px-3 z-20">
+        <div>
+          <Button>Select</Button>
+        </div>
+        <div>
+          <Button
+            type={hasFilter ? 'primary' : 'default'}
+            icon={<FilterOutlined />}
+            onClick={() => setIsShowFilter(true)}
+          />
+        </div>
+      </div>
+      <div className="pt-[68px] pb-4 ">
+        {(queryPokemons.isLoading || queryPokemons.isFetching) && (
+          <div>Loading Pokemon</div>
+        )}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {data.map((pokemon: TPokemonItem) => {
             return (
-              <Col xs={12} md={8} key={pokemon.id}>
-                <Link
-                  to={`/pokemon-detail/${pokemon.name}`}
-                  className="hover:outline-2 border border-transparent hover:border-blue-600 block rounded-lg"
-                >
-                  <PokemonCard data={pokemon} />
-                </Link>
-              </Col>
+              <Link
+                key={pokemon.id}
+                to={`/pokemon-detail/${pokemon.name}`}
+                className="hover:outline-2 border border-transparent hover:border-blue-600 block rounded-lg"
+              >
+                <PokemonCard data={pokemon} />
+              </Link>
             );
           })}
-          {queryPokemons.isFetchingNextPage && (
-            <Col span={24}>
-              <div className="flex justify-center py-3">
-                Loading More Pokemon
-              </div>
-            </Col>
-          )}
-        </Row>
+        </div>
       </div>
+      {queryPokemons.isFetchingNextPage && (
+        <div className="flex justify-center py-3 fixed bottom-0 left-0 right-0 max-w-screen-md bg-white items-center mx-auto border-t border-gray-200">
+          Loading
+        </div>
+      )}
       <Filter
         visible={isShowFilter}
         data={filter}
@@ -137,6 +153,7 @@ const IndexPage: React.FC = () => {
             ...state,
             ...data,
           }));
+          setIsShowFilter(false);
         }}
         onClose={() => setIsShowFilter(false)}
       />
