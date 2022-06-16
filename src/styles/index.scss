@@ -1,0 +1,31 @@
+@import 'tailwindcss/base';
+
+html,
+body {
+  font-size: 16px;
+  @apply text-gray-900;
+  @apply h-full #{!important};
+
+  #root {
+    @apply h-full #{!important};
+  }
+}
+body * {
+  @apply font-sans;
+}
+
+@import 'tailwindcss/components';
+
+@import 'tailwindcss/utilities';
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.ant-checkbox-group {
+  @apply flex flex-wrap gap-2 #{!important};
+  .ant-checkbox-wrapper {
+    @apply border border-gray-200 rounded-full px-2 py-1 #{!important};
+  }
+  .ant-checkbox-group-item {
+    margin: 0 !important;
+  }
+}
