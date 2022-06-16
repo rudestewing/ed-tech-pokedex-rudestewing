@@ -7,12 +7,21 @@ import {
 } from '../helpers/pokemon';
 import { TPokemonItem } from '../types';
 import BadgeType from './BadgeType';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { STYLE_FILL_CURRENT } from '../constants';
 
 type TProps = {
   data: TPokemonItem;
+  selected?: boolean;
+  selectMode?: boolean;
 };
 
-const PokemonCard: React.FC<TProps> = ({ data }) => {
+const PokemonCard: React.FC<TProps> = ({
+  data,
+  selectMode = false,
+  selected = false,
+}) => {
   const { id, name, types } = data;
 
   return (
@@ -24,6 +33,17 @@ const PokemonCard: React.FC<TProps> = ({ data }) => {
         ),
       }}
     >
+      {selectMode && (
+        <div className="absolute top-0 right-0 text-blue-600">
+          {selected ? (
+            <CheckCircleIcon style={{ ...STYLE_FILL_CURRENT, fontSize: 48 }} />
+          ) : (
+            <RadioButtonUncheckedIcon
+              style={{ ...STYLE_FILL_CURRENT, fontSize: 48 }}
+            />
+          )}
+        </div>
+      )}
       <div className="flex flex-col gap-1 z-10 px-3 py-2">
         <div className="w-full px-8 py-3">
           <img

@@ -5,7 +5,7 @@ import { TFilter } from './type';
 import Filter from './components/Filter';
 import PokemonCard from '../../commons/components/PokemonCard';
 import { TPokemonItem, TPokemonList } from '../../commons/types';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { Button } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
 import { getValueFromQueryString } from '../../commons/helpers';
@@ -21,6 +21,11 @@ const IndexPage: React.FC = () => {
   const queryClient = useQueryClient();
 
   const { search } = useLocation();
+  const { push } = useHistory();
+
+  const [isSelectToCompare, setIsSelectToCompare] = useState<boolean>(false);
+  const [selectedPokemons, setSelectedPokemons] = useState<TPokemonList>([]);
+  const [selectedPokemonIds, setSelectedPokemonIds] = useState<number[]>([]);
 
   const valueFromQueryString = getValueFromQueryString(
     ['typeIds', 'generationIds'],
@@ -135,11 +140,55 @@ const IndexPage: React.FC = () => {
     return filter.typeIds.length > 0 || filter.generationIds.length > 0;
   }, [filter]);
 
+  const handleCompare = (pokemon: TPokemonItem) => {
+    if (selectedPokemonIds.includes(pokemon.id)) {
+      setSelectedPokemonIds((state) =>
+        state.filter((id) => {
+          return id !== pokemon.id;
+        })
+      );
+      setSelectedPokemons((state) =>
+        state.filter((selectedPokemon) => {
+          return selectedPokemon.id !== pokemon.id;
+        })
+      );
+    } else {
+      setSelectedPokemonIds((state) => [...state, pokemon.id]);
+      setSelectedPokemons((state) => [...state, pokemon]);
+    }
+  };
+
+  const handleClickPokemon = (pokemon: TPokemonItem) => {
+    if (isSelectToCompare) {
+      handleCompare(pokemon);
+    } else {
+      push(`/pokemon-detail/${pokemon.name}`);
+    }
+  };
+
   return (
     <>
       <div className="fixed h-[64px] flex justify-end items-center gap-2 flex-wrap left-0 right-0 max-w-screen-md mx-auto px-3 z-20">
         <div>
-          <Button>Select</Button>
+          {isSelectToCompare ? (
+            <Button
+              onClick={() => {
+                setIsSelectToCompare(false);
+              }}
+              danger
+              type="primary"
+            >
+              Cancel compare
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                setIsSelectToCompare(true);
+              }}
+            >
+              Select to compare
+            </Button>
+          )}
         </div>
         <div>
           <Button
@@ -156,13 +205,17 @@ const IndexPage: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {data.map((pokemon: TPokemonItem) => {
             return (
-              <Link
+              <span
                 key={pokemon.id}
-                to={`/pokemon-detail/${pokemon.name}`}
-                className="hover:outline-2 border border-transparent hover:border-blue-600 block rounded-lg"
+                onClick={() => handleClickPokemon(pokemon)}
+                className="hover:outline-2 border border-transparent hover:border-blue-600 block rounded-lg cursor-pointer"
               >
-                <PokemonCard data={pokemon} />
-              </Link>
+                <PokemonCard
+                  data={pokemon}
+                  selected={selectedPokemonIds.includes(pokemon.id)}
+                  selectMode={isSelectToCompare}
+                />
+              </span>
             );
           })}
         </div>
