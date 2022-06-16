@@ -5,9 +5,11 @@ import { TFilter } from './type';
 import Filter from './components/Filter';
 import PokemonCard from '../../commons/components/PokemonCard';
 import { TPokemonItem, TPokemonList } from '../../commons/types';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
+import { getValueFromQueryString } from '../../commons/helpers';
+import useUpdateQueryStringFromObjectChange from '../../commons/hooks/useUpdateQueryStringFromObjectChange';
 
 const queryKeys = {
   pokemons: 'pokemons',
@@ -18,13 +20,38 @@ const limit = 20;
 const IndexPage: React.FC = () => {
   const queryClient = useQueryClient();
 
-  const [filter, setFilter] = useState<TFilter>({
-    typeIds: [],
-    generationIds: [],
-  });
+  const { search } = useLocation();
+
+  const valueFromQueryString = getValueFromQueryString(
+    ['typeIds', 'generationIds'],
+    search
+  );
+
+  const getInitialFilter = (): TFilter => {
+    const { typeIds, generationIds } = valueFromQueryString;
+
+    return {
+      typeIds: typeIds
+        ? String(typeIds)
+            .split(',')
+            .map((item) => Number(item))
+        : [],
+      generationIds: generationIds
+        ? String(generationIds)
+            .split(',')
+            .map((item) => Number(item))
+        : [],
+    };
+  };
+
+  const [filter, setFilter] = useState<TFilter>(getInitialFilter());
+
+  useUpdateQueryStringFromObjectChange(
+    Object.keys(filter).map((key: string) => key),
+    filter
+  );
 
   const [isShowFilter, setIsShowFilter] = useState<boolean>(false);
-
   const [data, setData] = useState<TPokemonList>([]);
   const [isBottom, setIsBottom] = useState<boolean>(false);
 
