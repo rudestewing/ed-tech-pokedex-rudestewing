@@ -225,8 +225,8 @@ const IndexPage: React.FC = () => {
         </div>
       </div>
       {queryPokemons.isFetchingNextPage && (
-        <div className="flex justify-center py-3 fixed bottom-0 left-0 right-0 max-w-screen-md bg-white items-center mx-auto border-t border-gray-200">
-          Loading
+        <div className="flex justify-center py-3 fixed bottom-0 left-0 right-0 max-w-screen-md bg-white items-center mx-auto border-t border-gray-200 z-50">
+          Loading more data...
         </div>
       )}
       <Filter
