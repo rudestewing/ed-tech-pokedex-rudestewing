@@ -58,7 +58,7 @@ const FloatingSelectedPokemonToCompare: React.FC<TProps> = ({ data }) => {
               </div>
             }
             title="more"
-            trigger={['hover']}
+            trigger={['hover', 'click']}
           >
             <span>
               <div className="w-[42px] md:w-[64px] h-[42px] md:h-[64px] rounded-full border border-indigo-500 p-2 flex flex-col justify-center items-center cursor-pointer hover:bg-indigo-500 hover:text-white">
