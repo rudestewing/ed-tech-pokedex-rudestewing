@@ -20,7 +20,7 @@ const PokemonCard: React.FC<TProps> = ({ data }) => {
       className="rounded-lg bg-white h-full w-full relative overflow-hidden p-2"
       style={{
         backgroundColor: getBackgroundColorFromTypeName(
-          types[0].name || 'normal'
+          types[0]?.name || 'normal'
         ),
       }}
     >

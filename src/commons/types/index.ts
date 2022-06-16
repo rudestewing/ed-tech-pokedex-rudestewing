@@ -38,7 +38,7 @@ export type TAbilities = TAbility[];
 export type TEvolutions = TPokemonItem[];
 
 export type TPokemonDetail = TPokemonItem & {
-  description: string;
+  shortDescription: string;
   height: number;
   weight: number;
   stats: TStats;
