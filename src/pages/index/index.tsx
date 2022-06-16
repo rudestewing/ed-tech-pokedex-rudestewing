@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useInfiniteQuery, useQueryClient } from 'react-query';
+import { useInfiniteQuery, useQuery, useQueryClient } from 'react-query';
+import { getAllGenerationsApi } from '../../commons/api/generations.api';
 import { fetchPokemonsApi } from '../../commons/api/pokemon.api';
+import { getAllTypesApi } from '../../commons/api/types.api';
 
 const queryKeys = {
   pokemons: 'pokemons',
+  types: 'types',
+  generations: 'generations',
 };
 
 type TFilter = {
@@ -22,6 +26,18 @@ const IndexPage: React.FC = () => {
   });
 
   const [data, setData] = useState<any[]>([]);
+
+  const queryTypes = useQuery(queryKeys.types, () => getAllTypesApi(), {
+    initialData: [],
+  });
+
+  const queryGenerations = useQuery(
+    queryKeys.generations,
+    () => getAllGenerationsApi(),
+    {
+      initialData: [],
+    }
+  );
 
   const queryPokemons = useInfiniteQuery(
     queryKeys.pokemons,
@@ -51,10 +67,12 @@ const IndexPage: React.FC = () => {
 
   return (
     <div>
-      <svg
-        className="animate-spin h-5 w-5 mr-3 bg-blue-500"
-        viewBox="0 0 24 24"
-      ></svg>
+      {queryTypes.data.map((type: any) => {
+        return <div key={type.id}>{type.name}</div>;
+      })}
+      {queryGenerations.data.map((generation: any) => {
+        return <div key={generation.id}>{generation.names[0].name}</div>;
+      })}
     </div>
   );
 };

@@ -8,12 +8,14 @@ type TFetchPokemonApi = {
     generationIds: number[];
   };
 };
-export const fetchPokemonsApi = async (props: TFetchPokemonApi) => {
+export const fetchPokemonsApi = async (
+  props: TFetchPokemonApi
+): Promise<any> => {
   try {
     const { limit, offset, filter } = props;
 
     const query = `
-    query pokemonQuery {
+    query {
       species: pokemon_v2_pokemonspecies(
         limit: ${limit},
         offset: ${offset},
@@ -60,4 +62,10 @@ export const fetchPokemonsApi = async (props: TFetchPokemonApi) => {
   }
 };
 
-export const getPokemonDetailApi = (name: string) => {};
+export const getPokemonDetailApi = async (name: string): Promise<any> => {
+  try {
+    return Promise.resolve();
+  } catch (error: any) {
+    return Promise.reject(error);
+  }
+};
