@@ -1,4 +1,5 @@
 import { graphQL } from '../helpers/http-request';
+import { TPokemonList } from '../types';
 
 type TFetchPokemonApi = {
   limit: number;
@@ -10,7 +11,7 @@ type TFetchPokemonApi = {
 };
 export const fetchPokemonsApi = async (
   props: TFetchPokemonApi
-): Promise<any> => {
+): Promise<TPokemonList> => {
   try {
     const { limit, offset, filter } = props;
 
@@ -41,21 +42,32 @@ export const fetchPokemonsApi = async (
         pokemons: pokemon_v2_pokemons {
           types: pokemon_v2_pokemontypes {
             type: pokemon_v2_type {
-              name
               id
+              name
             }
           }
-        }
-        generation: pokemon_v2_generation {
-          id
-          name
         }
       }
     }
     `;
 
     const response = await graphQL(query);
-    return Promise.resolve(response.data?.data?.species || []);
+
+    const data: TPokemonList = (response.data?.data?.species || []).map(
+      (item: any) => {
+        const pokemon = item.pokemons[0];
+        return {
+          id: item.id,
+          name: item.name,
+          types: pokemon.types.map(({ type }: any) => ({
+            id: type.id,
+            name: type.name,
+          })),
+        };
+      }
+    );
+
+    return Promise.resolve(data);
   } catch (error: any) {
     return Promise.reject(error);
   }

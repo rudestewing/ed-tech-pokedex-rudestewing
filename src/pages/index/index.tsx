@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useInfiniteQuery, useQuery, useQueryClient } from 'react-query';
-import { getAllGenerationsApi } from '../../commons/api/generations.api';
+import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { fetchPokemonsApi } from '../../commons/api/pokemon.api';
-import { getAllTypesApi } from '../../commons/api/types.api';
-import { Row, Col, Drawer } from 'antd';
+import { Row, Col } from 'antd';
 import { TFilter } from './type';
 import Filter from './components/Filter';
 import PokemonCard from '../../commons/components/PokemonCard';
+import { TPokemonItem, TPokemonList } from '../../commons/types';
+import { Link } from 'react-router-dom';
 
 const queryKeys = {
   pokemons: 'pokemons',
@@ -24,7 +24,7 @@ const IndexPage: React.FC = () => {
 
   const [isShowFilter, setIsShowFilter] = useState<boolean>(false);
 
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<TPokemonList>([]);
   const [isBottom, setIsBottom] = useState<boolean>(false);
 
   const queryPokemons = useInfiniteQuery(
@@ -39,7 +39,7 @@ const IndexPage: React.FC = () => {
     {
       enabled: false,
       onSuccess: (result: any) => {
-        const allPageData: any[] = [].concat(...result?.pages);
+        const allPageData: TPokemonList = [].concat(...result?.pages);
         setData(allPageData);
       },
       onError: (error: any) => {
@@ -74,13 +74,6 @@ const IndexPage: React.FC = () => {
   }, [filter]);
 
   const handleScrollDOM = () => {
-    console.log(
-      'handleSCrollDOM',
-      window.innerHeight,
-      window.scrollY,
-      window.document.body.scrollHeight
-    );
-
     if (
       window.innerHeight + window.scrollY ===
       window.document.body.scrollHeight
@@ -100,29 +93,39 @@ const IndexPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (isBottom) {
-      loadMore();
+    if (
+      isBottom &&
+      queryPokemons.hasNextPage &&
+      !queryPokemons.isLoading &&
+      !queryPokemons.isFetching &&
+      !queryPokemons.isFetchingNextPage
+    ) {
+      queryPokemons.fetchNextPage();
     }
-  }, [isBottom]);
+  }, [isBottom, queryPokemons]);
 
   return (
     <>
       <div className="pokemon-list">
         <Row gutter={[18, 18]}>
-          {data.map((pokemon: any) => {
+          {data.map((pokemon: TPokemonItem) => {
             return (
               <Col xs={12} md={8} key={pokemon.id}>
-                <PokemonCard
-                  id={pokemon.id}
-                  name={pokemon.name}
-                  types={pokemon.pokemons[0]?.types || []}
-                />
+                <Link to={`/pokemon-detail/${pokemon.name}`}>
+                  <PokemonCard
+                    id={pokemon.id}
+                    name={pokemon.name}
+                    types={pokemon.types || []}
+                  />
+                </Link>
               </Col>
             );
           })}
           {queryPokemons.isFetchingNextPage && (
             <Col span={24}>
-              <div className="flex justify-center">Loading More Pokemon</div>
+              <div className="flex justify-center py-3">
+                Loading More Pokemon
+              </div>
             </Col>
           )}
         </Row>
