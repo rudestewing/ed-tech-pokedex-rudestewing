@@ -111,12 +111,11 @@ const IndexPage: React.FC = () => {
           {data.map((pokemon: TPokemonItem) => {
             return (
               <Col xs={12} md={8} key={pokemon.id}>
-                <Link to={`/pokemon-detail/${pokemon.name}`}>
-                  <PokemonCard
-                    id={pokemon.id}
-                    name={pokemon.name}
-                    types={pokemon.types || []}
-                  />
+                <Link
+                  to={`/pokemon-detail/${pokemon.name}`}
+                  className="hover:outline-2 border border-transparent hover:border-blue-600 block rounded-lg"
+                >
+                  <PokemonCard data={pokemon} />
                 </Link>
               </Col>
             );

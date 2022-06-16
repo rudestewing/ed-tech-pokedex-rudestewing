@@ -1,25 +1,26 @@
 import React from 'react';
+import { capitalizeFirstLetter } from '../helpers';
 import {
   getArtwork,
   getBackgroundColorFromTypeName,
-  getBackgroundFromTypeNames,
   getIDNumber,
 } from '../helpers/pokemon';
+import { TPokemonItem } from '../types';
 import BadgeType from './BadgeType';
 
 type TProps = {
-  id: number;
-  name: string;
-  types: any[];
+  data: TPokemonItem;
 };
 
-const PokemonCard: React.FC<TProps> = ({ id, name, types }) => {
+const PokemonCard: React.FC<TProps> = ({ data }) => {
+  const { id, name, types } = data;
+
   return (
     <div
       className="rounded-lg bg-white h-full w-full relative overflow-hidden p-2"
       style={{
         backgroundColor: getBackgroundColorFromTypeName(
-          types[0]?.type?.name || 'normal'
+          types[0].name || 'normal'
         ),
       }}
     >
@@ -34,9 +35,12 @@ const PokemonCard: React.FC<TProps> = ({ id, name, types }) => {
         <div className="text-lg text-gray-600 font-semibold">
           #{getIDNumber(id)}
         </div>
+        <div className="text-lg text-gray-900 font-semibold">
+          {capitalizeFirstLetter(name)}
+        </div>
         <div className="flex flex-wrap gap-2">
-          {types.map((type: any) => {
-            return <BadgeType name={type?.type?.name} />;
+          {types.map((type) => {
+            return <BadgeType name={type.name} />;
           })}
         </div>
       </div>
