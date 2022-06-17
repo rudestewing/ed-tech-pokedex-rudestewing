@@ -1,0 +1,806 @@
+[
+  {
+    "name": "charizard",
+    "id": 6,
+    "flavorText": [
+      {
+        "flavorText": "Spits fire that\nis hot enough to\nmelt boulders.\fKnown to cause\nforest fires\nunintentionally."
+      }
+    ],
+    "pokemons": [
+      {
+        "name": "charizard",
+        "id": 6,
+        "weight": 905,
+        "height": 17,
+        "abilities": [
+          {
+            "ability": {
+              "id": 66,
+              "name": "blaze",
+              "abilityText": [
+                {
+                  "id": 132,
+                  "shortEffect": "Strengthens fire moves to inflict 1.5× damage at 1/3 max HP or less."
+                }
+              ]
+            }
+          },
+          {
+            "ability": {
+              "id": 94,
+              "name": "solar-power",
+              "abilityText": [
+                {
+                  "id": 188,
+                  "shortEffect": "Increases Special Attack to 1.5× but costs 1/8 max HP after each turn during strong sunlight."
+                }
+              ]
+            }
+          }
+        ],
+        "stats": [
+          {
+            "baseStat": 78,
+            "stat": {
+              "name": "hp",
+              "statName": [
+                {
+                  "name": "HP"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 84,
+            "stat": {
+              "name": "attack",
+              "statName": [
+                {
+                  "name": "Attack"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 78,
+            "stat": {
+              "name": "defense",
+              "statName": [
+                {
+                  "name": "Defense"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 109,
+            "stat": {
+              "name": "special-attack",
+              "statName": [
+                {
+                  "name": "Special Attack"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 85,
+            "stat": {
+              "name": "special-defense",
+              "statName": [
+                {
+                  "name": "Special Defense"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 100,
+            "stat": {
+              "name": "speed",
+              "statName": [
+                {
+                  "name": "Speed"
+                }
+              ]
+            }
+          }
+        ],
+        "types": [
+          {
+            "type": {
+              "id": 10,
+              "name": "fire"
+            }
+          },
+          {
+            "type": {
+              "id": 3,
+              "name": "flying"
+            }
+          }
+        ]
+      },
+      {
+        "name": "charizard-mega-x",
+        "id": 10034,
+        "weight": 1105,
+        "height": 17,
+        "abilities": [
+          {
+            "ability": {
+              "id": 181,
+              "name": "tough-claws",
+              "abilityText": [
+                {
+                  "id": 362,
+                  "shortEffect": "Strengthens moves that make contact to 1.33× their power."
+                }
+              ]
+            }
+          }
+        ],
+        "stats": [
+          {
+            "baseStat": 78,
+            "stat": {
+              "name": "hp",
+              "statName": [
+                {
+                  "name": "HP"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 130,
+            "stat": {
+              "name": "attack",
+              "statName": [
+                {
+                  "name": "Attack"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 111,
+            "stat": {
+              "name": "defense",
+              "statName": [
+                {
+                  "name": "Defense"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 130,
+            "stat": {
+              "name": "special-attack",
+              "statName": [
+                {
+                  "name": "Special Attack"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 85,
+            "stat": {
+              "name": "special-defense",
+              "statName": [
+                {
+                  "name": "Special Defense"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 100,
+            "stat": {
+              "name": "speed",
+              "statName": [
+                {
+                  "name": "Speed"
+                }
+              ]
+            }
+          }
+        ],
+        "types": [
+          {
+            "type": {
+              "id": 10,
+              "name": "fire"
+            }
+          },
+          {
+            "type": {
+              "id": 16,
+              "name": "dragon"
+            }
+          }
+        ]
+      },
+      {
+        "name": "charizard-mega-y",
+        "id": 10035,
+        "weight": 1005,
+        "height": 17,
+        "abilities": [
+          {
+            "ability": {
+              "id": 70,
+              "name": "drought",
+              "abilityText": [
+                {
+                  "id": 140,
+                  "shortEffect": "Summons strong sunlight that lasts indefinitely upon entering battle."
+                }
+              ]
+            }
+          }
+        ],
+        "stats": [
+          {
+            "baseStat": 78,
+            "stat": {
+              "name": "hp",
+              "statName": [
+                {
+                  "name": "HP"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 104,
+            "stat": {
+              "name": "attack",
+              "statName": [
+                {
+                  "name": "Attack"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 78,
+            "stat": {
+              "name": "defense",
+              "statName": [
+                {
+                  "name": "Defense"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 159,
+            "stat": {
+              "name": "special-attack",
+              "statName": [
+                {
+                  "name": "Special Attack"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 115,
+            "stat": {
+              "name": "special-defense",
+              "statName": [
+                {
+                  "name": "Special Defense"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 100,
+            "stat": {
+              "name": "speed",
+              "statName": [
+                {
+                  "name": "Speed"
+                }
+              ]
+            }
+          }
+        ],
+        "types": [
+          {
+            "type": {
+              "id": 10,
+              "name": "fire"
+            }
+          },
+          {
+            "type": {
+              "id": 3,
+              "name": "flying"
+            }
+          }
+        ]
+      },
+      {
+        "name": "charizard-gmax",
+        "id": 10196,
+        "weight": 10000,
+        "height": 280,
+        "abilities": [
+          {
+            "ability": {
+              "id": 66,
+              "name": "blaze",
+              "abilityText": [
+                {
+                  "id": 132,
+                  "shortEffect": "Strengthens fire moves to inflict 1.5× damage at 1/3 max HP or less."
+                }
+              ]
+            }
+          },
+          {
+            "ability": {
+              "id": 94,
+              "name": "solar-power",
+              "abilityText": [
+                {
+                  "id": 188,
+                  "shortEffect": "Increases Special Attack to 1.5× but costs 1/8 max HP after each turn during strong sunlight."
+                }
+              ]
+            }
+          }
+        ],
+        "stats": [
+          {
+            "baseStat": 78,
+            "stat": {
+              "name": "hp",
+              "statName": [
+                {
+                  "name": "HP"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 84,
+            "stat": {
+              "name": "attack",
+              "statName": [
+                {
+                  "name": "Attack"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 78,
+            "stat": {
+              "name": "defense",
+              "statName": [
+                {
+                  "name": "Defense"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 109,
+            "stat": {
+              "name": "special-attack",
+              "statName": [
+                {
+                  "name": "Special Attack"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 85,
+            "stat": {
+              "name": "special-defense",
+              "statName": [
+                {
+                  "name": "Special Defense"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 100,
+            "stat": {
+              "name": "speed",
+              "statName": [
+                {
+                  "name": "Speed"
+                }
+              ]
+            }
+          }
+        ],
+        "types": [
+          {
+            "type": {
+              "id": 10,
+              "name": "fire"
+            }
+          },
+          {
+            "type": {
+              "id": 3,
+              "name": "flying"
+            }
+          }
+        ]
+      }
+    ],
+    "evolutions": {
+      "species": [
+        {
+          "evolvesFromSpeciesId": null,
+          "name": "charmander",
+          "id": 4,
+          "pokemons": [
+            {
+              "name": "charmander",
+              "id": 4,
+              "types": [
+                {
+                  "type": {
+                    "id": 10,
+                    "name": "fire"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evolvesFromSpeciesId": 4,
+          "name": "charmeleon",
+          "id": 5,
+          "pokemons": [
+            {
+              "name": "charmeleon",
+              "id": 5,
+              "types": [
+                {
+                  "type": {
+                    "id": 10,
+                    "name": "fire"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evolvesFromSpeciesId": 5,
+          "name": "charizard",
+          "id": 6,
+          "pokemons": [
+            {
+              "name": "charizard",
+              "id": 6,
+              "types": [
+                {
+                  "type": {
+                    "id": 10,
+                    "name": "fire"
+                  }
+                },
+                {
+                  "type": {
+                    "id": 3,
+                    "name": "flying"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "charizard-mega-x",
+              "id": 10034,
+              "types": [
+                {
+                  "type": {
+                    "id": 10,
+                    "name": "fire"
+                  }
+                },
+                {
+                  "type": {
+                    "id": 16,
+                    "name": "dragon"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "charizard-mega-y",
+              "id": 10035,
+              "types": [
+                {
+                  "type": {
+                    "id": 10,
+                    "name": "fire"
+                  }
+                },
+                {
+                  "type": {
+                    "id": 3,
+                    "name": "flying"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "charizard-gmax",
+              "id": 10196,
+              "types": [
+                {
+                  "type": {
+                    "id": 10,
+                    "name": "fire"
+                  }
+                },
+                {
+                  "type": {
+                    "id": 3,
+                    "name": "flying"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "charmeleon",
+    "id": 5,
+    "flavorText": [
+      {
+        "flavorText": "When it swings\nits burning tail,\nit elevates the\ftemperature to\nunbearably high\nlevels."
+      }
+    ],
+    "pokemons": [
+      {
+        "name": "charmeleon",
+        "id": 5,
+        "weight": 190,
+        "height": 11,
+        "abilities": [
+          {
+            "ability": {
+              "id": 66,
+              "name": "blaze",
+              "abilityText": [
+                {
+                  "id": 132,
+                  "shortEffect": "Strengthens fire moves to inflict 1.5× damage at 1/3 max HP or less."
+                }
+              ]
+            }
+          },
+          {
+            "ability": {
+              "id": 94,
+              "name": "solar-power",
+              "abilityText": [
+                {
+                  "id": 188,
+                  "shortEffect": "Increases Special Attack to 1.5× but costs 1/8 max HP after each turn during strong sunlight."
+                }
+              ]
+            }
+          }
+        ],
+        "stats": [
+          {
+            "baseStat": 58,
+            "stat": {
+              "name": "hp",
+              "statName": [
+                {
+                  "name": "HP"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 64,
+            "stat": {
+              "name": "attack",
+              "statName": [
+                {
+                  "name": "Attack"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 58,
+            "stat": {
+              "name": "defense",
+              "statName": [
+                {
+                  "name": "Defense"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 80,
+            "stat": {
+              "name": "special-attack",
+              "statName": [
+                {
+                  "name": "Special Attack"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 65,
+            "stat": {
+              "name": "special-defense",
+              "statName": [
+                {
+                  "name": "Special Defense"
+                }
+              ]
+            }
+          },
+          {
+            "baseStat": 80,
+            "stat": {
+              "name": "speed",
+              "statName": [
+                {
+                  "name": "Speed"
+                }
+              ]
+            }
+          }
+        ],
+        "types": [
+          {
+            "type": {
+              "id": 10,
+              "name": "fire"
+            }
+          }
+        ]
+      }
+    ],
+    "evolutions": {
+      "species": [
+        {
+          "evolvesFromSpeciesId": null,
+          "name": "charmander",
+          "id": 4,
+          "pokemons": [
+            {
+              "name": "charmander",
+              "id": 4,
+              "types": [
+                {
+                  "type": {
+                    "id": 10,
+                    "name": "fire"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evolvesFromSpeciesId": 4,
+          "name": "charmeleon",
+          "id": 5,
+          "pokemons": [
+            {
+              "name": "charmeleon",
+              "id": 5,
+              "types": [
+                {
+                  "type": {
+                    "id": 10,
+                    "name": "fire"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evolvesFromSpeciesId": 5,
+          "name": "charizard",
+          "id": 6,
+          "pokemons": [
+            {
+              "name": "charizard",
+              "id": 6,
+              "types": [
+                {
+                  "type": {
+                    "id": 10,
+                    "name": "fire"
+                  }
+                },
+                {
+                  "type": {
+                    "id": 3,
+                    "name": "flying"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "charizard-mega-x",
+              "id": 10034,
+              "types": [
+                {
+                  "type": {
+                    "id": 10,
+                    "name": "fire"
+                  }
+                },
+                {
+                  "type": {
+                    "id": 16,
+                    "name": "dragon"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "charizard-mega-y",
+              "id": 10035,
+              "types": [
+                {
+                  "type": {
+                    "id": 10,
+                    "name": "fire"
+                  }
+                },
+                {
+                  "type": {
+                    "id": 3,
+                    "name": "flying"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "charizard-gmax",
+              "id": 10196,
+              "types": [
+                {
+                  "type": {
+                    "id": 10,
+                    "name": "fire"
+                  }
+                },
+                {
+                  "type": {
+                    "id": 3,
+                    "name": "flying"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

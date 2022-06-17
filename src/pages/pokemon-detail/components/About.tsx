@@ -30,7 +30,7 @@ const About: React.FC<TProps> = ({ description, pokemon }) => {
         <ul className="list-disc flex flex-col gap-2">
           {pokemon.abilities.map((ability) => {
             return (
-              <li className="flex flex-col gap-1">
+              <li className="flex flex-col gap-1" key={ability.name}>
                 <div className="text-gray-900 font-semibold">
                   {ability.name}
                 </div>

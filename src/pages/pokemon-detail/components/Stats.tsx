@@ -30,9 +30,9 @@ const Stats: React.FC<TProps> = ({ data }) => {
       {data.map((stat) => {
         return (
           <div key={stat.name}>
-            <div className="flex justify-between gap-2">
+            <div className="flex justify-start gap-2">
+              <div className="font-bold">({stat.baseStat})</div>
               <div>{stat.name}</div>
-              <div>{stat.baseStat}</div>
             </div>
             {progressBar(getPercentage(stat.baseStat))}
           </div>

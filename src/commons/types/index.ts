@@ -50,7 +50,7 @@ export type TPokemonDetail = TPokemonItem & {
 };
 
 export type TSpecies = {
-  id: string;
+  id: number;
   name: string;
   evolutions: TEvolutions;
   shortDescription: string;

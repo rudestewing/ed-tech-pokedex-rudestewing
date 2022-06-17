@@ -4,7 +4,9 @@ import { useQuery } from 'react-query';
 import { useHistory, useParams } from 'react-router-dom';
 import { getPokemonDetailApi } from '../../commons/api/pokemon.api';
 import BadgeType from '../../commons/components/BadgeType';
+import Layout from '../../commons/components/Layout';
 import Loader from '../../commons/components/Loader';
+import LoaderContent from '../../commons/components/LoaderContent';
 import { TOptionItem, TOptionItems } from '../../commons/constants';
 import { capitalizeFirstLetter } from '../../commons/helpers';
 import {
@@ -57,10 +59,7 @@ const PokemonDetailPage: React.FC = () => {
 
   const renderTopAction = () => {
     return (
-      <div className="fixed py-2 flex justify-between gap-3 w-full left-0 right-0 max-w-screen-md mx-auto">
-        <Button type="default" onClick={() => goBack()}>
-          Back
-        </Button>
+      <div className="fixed py-2 flex justify-end gap-3 w-full left-0 right-0 max-w-screen-md mx-auto">
         {forms.length > 1 && (
           <div className="flex justify-center">
             <Select
@@ -84,14 +83,6 @@ const PokemonDetailPage: React.FC = () => {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center">
         <div>Error</div>
-      </div>
-    );
-  };
-
-  const renderLoader = () => {
-    return (
-      <div className="min-h-screen flex flex-col justify-center items-center">
-        <Loader />
       </div>
     );
   };
@@ -153,15 +144,17 @@ const PokemonDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      {renderTopAction()}
+    <Layout hasBack>
+      <div className="min-h-screen flex flex-col">
+        {renderTopAction()}
 
-      {(isLoading || isFetching) && renderLoader()}
+        {(isLoading || isFetching) && <LoaderContent />}
 
-      {isError && renderError()}
+        {isError && renderError()}
 
-      {renderContent()}
-    </div>
+        {renderContent()}
+      </div>
+    </Layout>
   );
 };
 
