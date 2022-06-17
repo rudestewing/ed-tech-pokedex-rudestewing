@@ -6,11 +6,13 @@ type TProps = {
 };
 
 const Evolutions: React.FC<TProps> = ({ data }) => {
-  const evolutionTree = useMemo<any>(() =>
-    // data.forEach((evolution) => {
+  const evolutionTree = useMemo<any>(() => {
+    const node: any[] = [];
 
+    // data.forEach((evolution) => {
+    //   if(evolution.)
     // });
-    {}, [data]);
+  }, [data]);
 
   return <div></div>;
 };

@@ -61,16 +61,19 @@ export const parseSpecies = (apiDataSpecies: any): TSpecies => {
     id,
     name,
     shortDescription: flavorText[0]?.flavorText || '',
-    evolutions: evolutions.species.map(({ id, name, pokemons }: any) => ({
-      id,
-      name,
-      types: pokemons[0]
-        ? pokemons[0].types.map(({ type }: any) => ({
-            id: type.id,
-            name: type.name,
-          }))
-        : [],
-    })),
+    evolutions: evolutions.species.map(
+      ({ id, name, pokemons, evolvesFromSpeciesId }: any) => ({
+        id,
+        name,
+        evolvesFromSpeciesId,
+        types: pokemons[0]
+          ? pokemons[0].types.map(({ type }: any) => ({
+              id: type.id,
+              name: type.name,
+            }))
+          : [],
+      })
+    ),
     pokemons: pokemons.map((apiDataPokemon: any) =>
       parsePokemon(apiDataPokemon)
     ),
