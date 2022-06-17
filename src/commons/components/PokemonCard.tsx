@@ -47,7 +47,7 @@ const PokemonCard: React.FC<TProps> = ({
       )}
       <div className="flex flex-col gap-1 z-10 px-3 py-2">
         <div className="w-full px-8 py-3 flex justify-center items-center">
-          <div className="w-[100px] h-[100px]">
+          <div className="w-full">
             <img
               src={getArtwork(id)}
               alt=""
