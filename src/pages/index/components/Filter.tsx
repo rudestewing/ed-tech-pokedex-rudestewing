@@ -1,4 +1,4 @@
-import { Button, Checkbox, Drawer, Form, Radio } from 'antd';
+import { Button, Checkbox, Drawer } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import { getAllGenerationsApi } from '../../../commons/api/generations.api';

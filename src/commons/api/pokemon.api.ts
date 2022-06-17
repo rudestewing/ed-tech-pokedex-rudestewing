@@ -1,6 +1,6 @@
 import { graphQL } from '../helpers/http-request';
-import { parsePokemon } from '../helpers/pokemon';
-import { TPokemonDetail, TPokemonList, TSpecies } from '../types';
+import { parseSpecies } from '../helpers/pokemon';
+import { TPokemonList, TSpecies } from '../types';
 
 type TFetchPokemonApi = {
   limit: number;
@@ -611,34 +611,89 @@ export const getPokemonDetailApi = async (
     const response = await graphQL(query);
 
     const species = response.data?.data?.species[0] || null;
-    // const species = speciesFake;
 
     if (species) {
-      const { id, name, flavorText, pokemons, evolutions } = species;
-
-      const data = {
-        id,
-        name,
-        shortDescription: flavorText[0]?.flavorText || '',
-        evolutions: evolutions.species.map(({ id, name, pokemons }: any) => ({
-          id,
-          name,
-          types: pokemons[0]
-            ? pokemons[0].types.map(({ type }: any) => ({
-                id: type.id,
-                name: type.name,
-              }))
-            : [],
-        })),
-        pokemons: pokemons.map((apiDataPokemon: any) =>
-          parsePokemon(apiDataPokemon)
-        ),
-      };
-
-      return Promise.resolve(data);
+      return Promise.resolve(parseSpecies(species));
     } else {
       throw new Error('no pokemon');
     }
+  } catch (error: any) {
+    return Promise.reject(error);
+  }
+};
+
+export const getPokemonsDetailApi = async (
+  names: string[]
+): Promise<TSpecies[]> => {
+  try {
+    const query = `
+    query {
+      species: pokemon_v2_pokemonspecies(where: {name: {_in: [${names.join(
+        ','
+      )}]}}) {
+        name
+        id
+        flavorText: pokemon_v2_pokemonspeciesflavortexts(where: {pokemon_v2_language: {name: {_eq: "en"}}}, limit: 1) {
+          flavorText: flavor_text
+        }
+        pokemons: pokemon_v2_pokemons {
+          name
+          id
+          weight
+          height
+          abilities: pokemon_v2_pokemonabilities {
+            ability: pokemon_v2_ability {
+              id
+              name
+              abilityText: pokemon_v2_abilityeffecttexts(where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+                id
+                shortEffect: short_effect
+              }
+            }
+          }
+          stats: pokemon_v2_pokemonstats {
+            baseStat: base_stat
+            stat: pokemon_v2_stat {
+              name
+              statName: pokemon_v2_statnames(where: {pokemon_v2_language: {name: {_eq: "en"}}}, limit: 1) {
+                name
+              }
+            }
+          }
+          types:pokemon_v2_pokemontypes {
+            type: pokemon_v2_type {
+              id
+              name
+            }
+          }
+        }
+        evolutions: pokemon_v2_evolutionchain {
+          species: pokemon_v2_pokemonspecies {
+            evolvesFromSpeciesId: evolves_from_species_id
+            name
+            id
+            pokemons: pokemon_v2_pokemons {
+              name
+              id
+              types:pokemon_v2_pokemontypes {
+                type: pokemon_v2_type {
+                  id
+                  name
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    `;
+
+    const response = await graphQL(query);
+
+    const data = (response.data?.data?.species || []).map((species: any) =>
+      parseSpecies(species)
+    );
+    return Promise.resolve(data);
   } catch (error: any) {
     return Promise.reject(error);
   }
