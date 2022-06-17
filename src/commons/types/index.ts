@@ -38,10 +38,16 @@ export type TAbilities = TAbility[];
 export type TEvolutions = TPokemonItem[];
 
 export type TPokemonDetail = TPokemonItem & {
-  shortDescription: string;
   height: number;
   weight: number;
   stats: TStats;
   abilities: TAbilities;
+};
+
+export type TSpecies = {
+  id: string;
+  name: string;
   evolutions: TEvolutions;
+  shortDescription: string;
+  pokemons: TPokemonDetail[];
 };
