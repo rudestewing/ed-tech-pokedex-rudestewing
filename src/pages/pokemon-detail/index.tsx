@@ -65,7 +65,6 @@ const PokemonDetailPage: React.FC = () => {
             <Select
               options={optionsPokemons as []}
               onChange={(e, obj: any) => {
-                console.log('onChange', e, obj);
                 setSelectedForm(obj.payload);
               }}
               defaultValue={String(selectedForm?.id)}

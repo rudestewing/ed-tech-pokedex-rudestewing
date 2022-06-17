@@ -14,7 +14,6 @@ type TFetchPokemonApi = {
 export const fetchPokemonsApi = async (
   props: TFetchPokemonApi
 ): Promise<TPokemonList> => {
-  console.log('filter', props.filter);
   try {
     const { limit, offset, filter } = props;
 
@@ -149,13 +148,13 @@ export const getPokemonDetailApi = async (
     }
     `;
 
-    const response = await graphQL(query);
-    const species = response.data?.data?.species[0] || null;
+    // const response = await graphQL(query);
+    // const species = response.data?.data?.species[0] || null;
 
-    // const response = await axios('/mock-data/pokemon-detail.json', {
-    //   method: 'get',
-    // });
-    // const species = response.data || null;
+    const response = await axios('/mock-data/pokemon-detail.json', {
+      method: 'get',
+    });
+    const species = response.data || null;
 
     if (species) {
       return Promise.resolve(parseSpecies(species));

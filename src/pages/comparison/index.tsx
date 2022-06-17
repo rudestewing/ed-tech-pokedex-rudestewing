@@ -16,8 +16,6 @@ const ComparisonPage: React.FC = () => {
     search
   );
 
-  console.log('valueFromQueryString', valueFromQueryString);
-
   const pokemonNames = useMemo<string[]>(() => {
     const { pokemonNames } = valueFromQueryString;
     return pokemonNames ? pokemonNames.split(',') : [];
@@ -34,8 +32,6 @@ const ComparisonPage: React.FC = () => {
   );
 
   const { data } = queryPokemons;
-
-  console.log('queryPokemons', queryPokemons.data);
 
   const pokemonLength = useMemo<number>(() => data?.length || 0, [data]);
 

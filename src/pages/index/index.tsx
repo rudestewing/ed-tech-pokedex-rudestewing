@@ -133,7 +133,6 @@ const IndexPage: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log('isBottom', isBottom);
     if (isBottom) {
       loadMore();
     }
