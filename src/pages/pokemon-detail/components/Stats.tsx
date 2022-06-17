@@ -29,7 +29,7 @@ const Stats: React.FC<TProps> = ({ data }) => {
     <div className="flex flex-col gap-2">
       {data.map((stat) => {
         return (
-          <div>
+          <div key={stat.name}>
             <div className="flex justify-between gap-2">
               <div>{stat.name}</div>
               <div>{stat.baseStat}</div>

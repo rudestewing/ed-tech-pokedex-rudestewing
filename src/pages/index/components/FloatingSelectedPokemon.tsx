@@ -1,6 +1,7 @@
 import { Popover } from 'antd';
 import { Button } from 'antd';
 import React, { useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
 import { getArtwork } from '../../../commons/helpers/pokemon';
 import { TPokemonItem, TPokemonList } from '../../../commons/types';
 
@@ -11,6 +12,8 @@ type TProps = {
 const maxDisplayed = 2;
 
 const FloatingSelectedPokemonToCompare: React.FC<TProps> = ({ data }) => {
+  const { push } = useHistory();
+
   const displayedPokemons = useMemo<TPokemonList>(() => {
     if (data.length > maxDisplayed) {
       return [...data].splice(0, maxDisplayed);
@@ -27,7 +30,10 @@ const FloatingSelectedPokemonToCompare: React.FC<TProps> = ({ data }) => {
     return restCount > 0 ? [...data].splice(maxDisplayed, data.length - 1) : [];
   }, [restCount, data]);
 
-  const handleCompare = () => {};
+  const handleCompare = () => {
+    const pokemonNames = data.map((pokemon) => pokemon.name).join(',');
+    push(`/comparison?pokemonNames=${pokemonNames}`);
+  };
 
   const renderRoundPokemon = (pokemon: TPokemonItem) => {
     return (
@@ -58,13 +64,11 @@ const FloatingSelectedPokemonToCompare: React.FC<TProps> = ({ data }) => {
               </div>
             }
             title="more"
-            trigger={['hover', 'click']}
+            trigger={['hover']}
           >
-            <span>
-              <div className="w-[42px] md:w-[64px] h-[42px] md:h-[64px] rounded-full border border-indigo-500 p-2 flex flex-col justify-center items-center cursor-pointer hover:bg-indigo-500 hover:text-white">
-                <div>{restCount}+</div>
-              </div>
-            </span>
+            <div className="w-[42px] md:w-[64px] h-[42px] md:h-[64px] rounded-full border border-indigo-500 p-2 flex flex-col justify-center items-center cursor-pointer hover:bg-indigo-500 hover:text-white">
+              <div>{restCount}+</div>
+            </div>
           </Popover>
         )}
       </div>

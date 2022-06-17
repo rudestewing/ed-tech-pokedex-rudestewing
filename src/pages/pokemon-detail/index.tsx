@@ -4,6 +4,7 @@ import { useQuery } from 'react-query';
 import { useHistory, useParams } from 'react-router-dom';
 import { getPokemonDetailApi } from '../../commons/api/pokemon.api';
 import BadgeType from '../../commons/components/BadgeType';
+import Loader from '../../commons/components/Loader';
 import { TOptionItem, TOptionItems } from '../../commons/constants';
 import { capitalizeFirstLetter } from '../../commons/helpers';
 import {
@@ -52,8 +53,8 @@ const PokemonDetailPage: React.FC = () => {
     });
   }, [forms]);
 
-  return (
-    <div className="min-h-screen">
+  const renderTopAction = () => {
+    return (
       <div className="fixed py-2 flex justify-between gap-3 w-full left-0 right-0 max-w-screen-md mx-auto">
         <Button type="default" onClick={() => goBack()}>
           Back
@@ -74,58 +75,88 @@ const PokemonDetailPage: React.FC = () => {
           </div>
         )}
       </div>
+    );
+  };
 
-      {(isLoading || isFetching) && <div>Loading</div>}
+  const renderError = () => {
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center">
+        <div>Error</div>
+      </div>
+    );
+  };
 
-      {isError && <div>Error</div>}
+  const renderLoader = () => {
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center">
+        <Loader />
+      </div>
+    );
+  };
 
-      {selectedForm && (
-        <div
-          className="min-h-screen flex flex-col gap-4 px-3 py-8"
-          style={{
-            backgroundColor: selectedForm
-              ? getBackgroundColorFromTypeName(
-                  selectedForm.types[0]?.name || 'normal'
-                )
-              : 'transparent',
-          }}
-        >
-          <div className="flex flex-col gap-2 items-center">
-            <div className="w-[280px] md:w-[320px] h-[280px] md:h-[320px] p-3">
-              <img
-                src={getArtwork(selectedForm.id)}
-                alt=""
-                className="object-cover object-center w-full h-full"
-              />
-            </div>
-            <div className="text-2xl text-gray-600 font-bold">
-              #{getIDNumber(selectedForm.id)}
-            </div>
-            <div className="text-2xl text-gray-800 font-bold tracking-wider">
-              {capitalizeFirstLetter(selectedForm.name)}
-            </div>
-            <div className="flex flex-wrap gap-3">
-              {selectedForm.types.map((type) => (
-                <BadgeType name={type.name} key={type.id} />
-              ))}
-            </div>
+  const renderContent = () => {
+    if (!selectedForm) {
+      return '';
+    }
+
+    return (
+      <div
+        className="min-h-screen flex flex-col gap-4 px-3 py-8"
+        style={{
+          backgroundColor: selectedForm
+            ? getBackgroundColorFromTypeName(
+                selectedForm.types[0]?.name || 'normal'
+              )
+            : 'transparent',
+        }}
+      >
+        <div className="flex flex-col gap-2 items-center">
+          <div className="w-[280px] md:w-[320px] h-[280px] md:h-[320px] p-3">
+            <img
+              src={getArtwork(selectedForm.id)}
+              alt=""
+              className="object-cover object-center w-full h-full"
+            />
           </div>
-          <div className="rounded-xl bg-white py-3 px-6">
-            <Tabs>
-              <Tabs.TabPane tab="About" key={1}>
-                <div className="flex flex-col gap-2">
-                  <div>{queryPokemon.data?.shortDescription}</div>
-                  <div>height</div>
-                  <div>width</div>
-                </div>
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Stats" key={2}>
-                <Stats data={selectedForm.stats} />
-              </Tabs.TabPane>
-            </Tabs>
+          <div className="text-2xl text-gray-600 font-bold">
+            #{getIDNumber(selectedForm.id)}
+          </div>
+          <div className="text-2xl text-gray-800 font-bold tracking-wider">
+            {capitalizeFirstLetter(selectedForm.name)}
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {selectedForm.types.map((type) => (
+              <BadgeType name={type.name} key={type.id} />
+            ))}
           </div>
         </div>
-      )}
+        <div className="rounded-xl bg-white py-3 px-6">
+          <Tabs>
+            <Tabs.TabPane tab="About" key={1}>
+              <div className="flex flex-col gap-2">
+                <div>{queryPokemon.data?.shortDescription}</div>
+                <div>height</div>
+                <div>width</div>
+              </div>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Stats" key={2}>
+              <Stats data={selectedForm.stats} />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="min-h-screen">
+      {renderTopAction()}
+
+      {(isLoading || isFetching) && renderLoader()}
+
+      {isError && renderError()}
+
+      {renderContent()}
     </div>
   );
 };

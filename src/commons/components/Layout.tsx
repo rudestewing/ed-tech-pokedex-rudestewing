@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 type TProps = {
   children: any;
 };
 
 const Layout: React.FC<TProps> = ({ children }) => {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
   return (
     <div className="bg-gray-50 min-h-full">
       <div

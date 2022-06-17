@@ -1,6 +1,6 @@
 import hexToRgba from 'hex-to-rgba';
 import { POKEMON_TYPE_COLOR } from '../constants/pokemon.constant';
-import { TPokemonDetail } from '../types';
+import { TPokemonDetail, TSpecies } from '../types';
 
 export const getColorFromTypeName = (typeName: string): string => {
   return typeName in POKEMON_TYPE_COLOR
@@ -52,5 +52,27 @@ export const parsePokemon = (apiDataPokemon: any): TPokemonDetail => {
       name: ability.name,
       shortEffect: ability.abilityText[0]?.shortEffect || '',
     })),
+  };
+};
+
+export const parseSpecies = (apiDataSpecies: any): TSpecies => {
+  const { id, name, flavorText, evolutions, pokemons } = apiDataSpecies;
+  return {
+    id,
+    name,
+    shortDescription: flavorText[0]?.flavorText || '',
+    evolutions: evolutions.species.map(({ id, name, pokemons }: any) => ({
+      id,
+      name,
+      types: pokemons[0]
+        ? pokemons[0].types.map(({ type }: any) => ({
+            id: type.id,
+            name: type.name,
+          }))
+        : [],
+    })),
+    pokemons: pokemons.map((apiDataPokemon: any) =>
+      parsePokemon(apiDataPokemon)
+    ),
   };
 };

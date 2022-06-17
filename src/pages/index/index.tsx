@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { fetchPokemonsApi } from '../../commons/api/pokemon.api';
 import { TFilter } from './type';
 import Filter from './components/Filter';
-import PokemonCard from '../../commons/components/PokemonCard';
 import { TPokemonItem, TPokemonList } from '../../commons/types';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Button } from 'antd';
@@ -11,6 +10,8 @@ import { FilterOutlined } from '@ant-design/icons';
 import { getValueFromQueryString } from '../../commons/helpers';
 import useUpdateQueryStringFromObjectChange from '../../commons/hooks/useUpdateQueryStringFromObjectChange';
 import FloatingSelectedPokemonToCompare from './components/FloatingSelectedPokemon';
+import Loader from '../../commons/components/Loader';
+import PokemonList from './components/PokemonList';
 
 const queryKeys = {
   pokemons: 'pokemons',
@@ -20,13 +21,8 @@ const limit = 20;
 
 const IndexPage: React.FC = () => {
   const queryClient = useQueryClient();
-
   const { search } = useLocation();
   const { push } = useHistory();
-
-  const [isSelectToCompare, setIsSelectToCompare] = useState<boolean>(false);
-  const [selectedPokemons, setSelectedPokemons] = useState<TPokemonList>([]);
-  const [selectedPokemonIds, setSelectedPokemonIds] = useState<number[]>([]);
 
   const valueFromQueryString = getValueFromQueryString(
     ['typeIds', 'generationIds'],
@@ -60,6 +56,9 @@ const IndexPage: React.FC = () => {
   const [isShowFilter, setIsShowFilter] = useState<boolean>(false);
   const [data, setData] = useState<TPokemonList>([]);
   const [isBottom, setIsBottom] = useState<boolean>(false);
+  const [isSelectToCompare, setIsSelectToCompare] = useState<boolean>(false);
+  const [selectedPokemons, setSelectedPokemons] = useState<TPokemonList>([]);
+  const [selectedPokemonIds, setSelectedPokemonIds] = useState<number[]>([]);
 
   const queryPokemons = useInfiniteQuery(
     queryKeys.pokemons,
@@ -102,10 +101,10 @@ const IndexPage: React.FC = () => {
     refetchData();
   }, [filter]);
 
-  const handleScrollDOM = () => {
+  const handleScrollDOM = (e: any) => {
     if (
-      window.innerHeight + window.scrollY ===
-      window.document.body.scrollHeight
+      window.innerHeight + window.scrollY >=
+      window.document.body.scrollHeight - 50
     ) {
       setIsBottom(true);
     } else {
@@ -121,7 +120,7 @@ const IndexPage: React.FC = () => {
     };
   }, []);
 
-  const loadMore = useCallback(() => {
+  const loadMore = () => {
     if (
       queryPokemons.hasNextPage &&
       !queryPokemons.isLoading &&
@@ -130,9 +129,10 @@ const IndexPage: React.FC = () => {
     ) {
       queryPokemons.fetchNextPage();
     }
-  }, [queryPokemons]);
+  };
 
   useEffect(() => {
+    console.log('isBottom', isBottom);
     if (isBottom) {
       loadMore();
     }
@@ -176,9 +176,17 @@ const IndexPage: React.FC = () => {
     }
   };
 
-  return (
-    <>
-      <div className="fixed h-[64px] flex justify-end items-center gap-2 flex-wrap left-0 right-0 max-w-screen-md mx-auto px-3 z-20">
+  const handleApplyFilter = (data: TFilter) => {
+    setFilter((state) => ({
+      ...state,
+      ...data,
+    }));
+    setIsShowFilter(false);
+  };
+
+  const renderTopAction = () => {
+    return (
+      <div className="fixed h-[64px] flex justify-end items-center gap-2 flex-wrap left-0 right-0 max-w-screen-md mx-auto px-3 z-20 top-0 mt-[64px]">
         <div>
           {isSelectToCompare ? (
             <Button
@@ -202,43 +210,50 @@ const IndexPage: React.FC = () => {
           />
         </div>
       </div>
-      <div className="pt-[68px] pb-4 px-3">
-        {(queryPokemons.isLoading || queryPokemons.isFetching) && (
-          <div>Loading Pokemon</div>
-        )}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {data.map((pokemon: TPokemonItem) => {
-            return (
-              <span
-                key={pokemon.id}
-                onClick={() => handleClickPokemon(pokemon)}
-                className="hover:outline-2 border border-transparent hover:border-blue-600 block rounded-lg cursor-pointer"
-              >
-                <PokemonCard
-                  data={pokemon}
-                  selected={selectedPokemonIds.includes(pokemon.id)}
-                  selectMode={isSelectToCompare}
-                />
-              </span>
-            );
-          })}
-        </div>
+    );
+  };
+
+  const renderInitialLoader = () => {
+    return (
+      <div className="flex flex-col justify-center items-center min-h-screen">
+        <Loader />
       </div>
-      {queryPokemons.isFetchingNextPage && (
-        <div className="flex justify-center py-3 fixed bottom-0 left-0 right-0 max-w-screen-md bg-white items-center mx-auto border-t border-gray-200 z-50">
-          Loading more data...
+    );
+  };
+
+  const renderLoadMore = () => {
+    return (
+      <div className="flex justify-center py-3 fixed bottom-0 left-0 right-0 max-w-screen-md bg-white items-center mx-auto border-t border-gray-200 z-50">
+        <div>
+          <Loader />
         </div>
-      )}
+        <div>Loading more data...</div>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      <div className="min-h-screen pt-[68px] pb-4 px-3">
+        {renderTopAction()}
+
+        {(queryPokemons.isLoading || queryPokemons.isFetching) &&
+          renderInitialLoader()}
+
+        <PokemonList
+          data={data}
+          isSelectToCompare={isSelectToCompare}
+          onClickPokemon={handleClickPokemon}
+          selectedPokemonIds={selectedPokemonIds}
+        />
+
+        {queryPokemons.isFetchingNextPage && renderLoadMore()}
+      </div>
+
       <Filter
         visible={isShowFilter}
         data={filter}
-        onApply={(data) => {
-          setFilter((state) => ({
-            ...state,
-            ...data,
-          }));
-          setIsShowFilter(false);
-        }}
+        onApply={handleApplyFilter}
         onClose={() => setIsShowFilter(false)}
       />
       {isSelectToCompare && selectedPokemons.length > 0 && (
