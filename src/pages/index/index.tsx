@@ -234,7 +234,7 @@ const IndexPage: React.FC = () => {
 
   return (
     <>
-      <div className="min-h-screen pt-[68px] pb-4 px-3">
+      <div className="pt-[68px] pb-4 px-3">
         {renderTopAction()}
 
         {(queryPokemons.isLoading || queryPokemons.isFetching) &&
