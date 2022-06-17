@@ -9,17 +9,13 @@ const Routes: React.FC = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Layout>
-          <>
-            <Route exact path="/" component={IndexPage} />
-            <Route
-              exact
-              path="/pokemon-detail/:name"
-              component={PokemonDetailPage}
-            />
-            <Route exact path="/comparison" component={ComparisonPage} />
-          </>
-        </Layout>
+        <Route exact path="/" component={IndexPage} />
+        <Route
+          exact
+          path="/pokemon-detail/:name"
+          component={PokemonDetailPage}
+        />
+        <Route exact path="/comparison" component={ComparisonPage} />
       </Switch>
     </BrowserRouter>
   );

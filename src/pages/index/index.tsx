@@ -12,6 +12,7 @@ import useUpdateQueryStringFromObjectChange from '../../commons/hooks/useUpdateQ
 import FloatingSelectedPokemonToCompare from './components/FloatingSelectedPokemon';
 import Loader from '../../commons/components/Loader';
 import PokemonList from './components/PokemonList';
+import Layout from '../../commons/components/Layout';
 
 const queryKeys = {
   pokemons: 'pokemons',
@@ -155,8 +156,10 @@ const IndexPage: React.FC = () => {
         })
       );
     } else {
-      setSelectedPokemonIds((state) => [...state, pokemon.id]);
-      setSelectedPokemons((state) => [...state, pokemon]);
+      if (selectedPokemonIds.length < 3) {
+        setSelectedPokemonIds((state) => [...state, pokemon.id]);
+        setSelectedPokemons((state) => [...state, pokemon]);
+      }
     }
   };
 
@@ -234,21 +237,23 @@ const IndexPage: React.FC = () => {
 
   return (
     <>
-      <div className="min-h-screen pt-[68px] pb-4 px-3">
-        {renderTopAction()}
+      <Layout>
+        <div className="pt-[68px] pb-4 px-3">
+          {renderTopAction()}
 
-        {(queryPokemons.isLoading || queryPokemons.isFetching) &&
-          renderInitialLoader()}
+          {(queryPokemons.isLoading || queryPokemons.isFetching) &&
+            renderInitialLoader()}
 
-        <PokemonList
-          data={data}
-          isSelectToCompare={isSelectToCompare}
-          onClickPokemon={handleClickPokemon}
-          selectedPokemonIds={selectedPokemonIds}
-        />
+          <PokemonList
+            data={data}
+            isSelectToCompare={isSelectToCompare}
+            onClickPokemon={handleClickPokemon}
+            selectedPokemonIds={selectedPokemonIds}
+          />
 
-        {queryPokemons.isFetchingNextPage && renderLoadMore()}
-      </div>
+          {queryPokemons.isFetchingNextPage && renderLoadMore()}
+        </div>
+      </Layout>
 
       <Filter
         visible={isShowFilter}

@@ -4,7 +4,9 @@ import { useQuery } from 'react-query';
 import { useHistory, useParams } from 'react-router-dom';
 import { getPokemonDetailApi } from '../../commons/api/pokemon.api';
 import BadgeType from '../../commons/components/BadgeType';
+import Layout from '../../commons/components/Layout';
 import Loader from '../../commons/components/Loader';
+import LoaderContent from '../../commons/components/LoaderContent';
 import { TOptionItem, TOptionItems } from '../../commons/constants';
 import { capitalizeFirstLetter } from '../../commons/helpers';
 import {
@@ -13,6 +15,8 @@ import {
   getIDNumber,
 } from '../../commons/helpers/pokemon';
 import { TPokemonDetail } from '../../commons/types';
+import About from './components/About';
+import Evolutions from './components/Evolutions';
 import Stats from './components/Stats';
 
 const PokemonDetailPage: React.FC = () => {
@@ -31,7 +35,7 @@ const PokemonDetailPage: React.FC = () => {
 
   const { isLoading, isFetching, isError } = queryPokemon;
 
-  const pokemon = queryPokemon.data;
+  const species = queryPokemon.data;
 
   const [forms, setForms] = useState<TPokemonDetail[]>([]);
   const [selectedForm, setSelectedForm] = useState<TPokemonDetail | null>(null);
@@ -55,10 +59,7 @@ const PokemonDetailPage: React.FC = () => {
 
   const renderTopAction = () => {
     return (
-      <div className="fixed py-2 flex justify-between gap-3 w-full left-0 right-0 max-w-screen-md mx-auto">
-        <Button type="default" onClick={() => goBack()}>
-          Back
-        </Button>
+      <div className="fixed py-2 flex justify-end gap-3 w-full left-0 right-0 max-w-screen-md mx-auto">
         {forms.length > 1 && (
           <div className="flex justify-center">
             <Select
@@ -82,14 +83,6 @@ const PokemonDetailPage: React.FC = () => {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center">
         <div>Error</div>
-      </div>
-    );
-  };
-
-  const renderLoader = () => {
-    return (
-      <div className="min-h-screen flex flex-col justify-center items-center">
-        <Loader />
       </div>
     );
   };
@@ -133,14 +126,16 @@ const PokemonDetailPage: React.FC = () => {
         <div className="rounded-xl bg-white py-3 px-6">
           <Tabs>
             <Tabs.TabPane tab="About" key={1}>
-              <div className="flex flex-col gap-2">
-                <div>{queryPokemon.data?.shortDescription}</div>
-                <div>height</div>
-                <div>width</div>
-              </div>
+              <About
+                description={species?.shortDescription || ''}
+                pokemon={selectedForm}
+              />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Stats" key={2}>
               <Stats data={selectedForm.stats} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Evolutions" key={3}>
+              <Evolutions data={species?.evolutions || []} />
             </Tabs.TabPane>
           </Tabs>
         </div>
@@ -149,15 +144,17 @@ const PokemonDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      {renderTopAction()}
+    <Layout hasBack>
+      <div className="min-h-screen flex flex-col">
+        {renderTopAction()}
 
-      {(isLoading || isFetching) && renderLoader()}
+        {(isLoading || isFetching) && <LoaderContent />}
 
-      {isError && renderError()}
+        {isError && renderError()}
 
-      {renderContent()}
-    </div>
+        {renderContent()}
+      </div>
+    </Layout>
   );
 };
 

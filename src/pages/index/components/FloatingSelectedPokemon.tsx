@@ -9,7 +9,7 @@ type TProps = {
   data: TPokemonList;
 };
 
-const maxDisplayed = 2;
+const maxDisplayed = 3;
 
 const FloatingSelectedPokemonToCompare: React.FC<TProps> = ({ data }) => {
   const { push } = useHistory();
