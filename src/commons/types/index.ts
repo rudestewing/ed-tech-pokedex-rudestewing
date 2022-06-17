@@ -35,12 +35,14 @@ export type TAbility = {
 
 export type TAbilities = TAbility[];
 
-export type TEvolutions = {
+export type TEvolution = {
   id: number;
   name: string;
   types: TPokemonType[];
   evolvesFromSpeciesId: number | null;
-}[];
+};
+
+export type TEvolutions = TEvolution[];
 
 export type TPokemonDetail = TPokemonItem & {
   height: number;
