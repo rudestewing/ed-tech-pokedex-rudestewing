@@ -13,6 +13,8 @@ import {
   getIDNumber,
 } from '../../commons/helpers/pokemon';
 import { TPokemonDetail } from '../../commons/types';
+import About from './components/About';
+import Evolutions from './components/Evolutions';
 import Stats from './components/Stats';
 
 const PokemonDetailPage: React.FC = () => {
@@ -31,7 +33,7 @@ const PokemonDetailPage: React.FC = () => {
 
   const { isLoading, isFetching, isError } = queryPokemon;
 
-  const pokemon = queryPokemon.data;
+  const species = queryPokemon.data;
 
   const [forms, setForms] = useState<TPokemonDetail[]>([]);
   const [selectedForm, setSelectedForm] = useState<TPokemonDetail | null>(null);
@@ -133,14 +135,16 @@ const PokemonDetailPage: React.FC = () => {
         <div className="rounded-xl bg-white py-3 px-6">
           <Tabs>
             <Tabs.TabPane tab="About" key={1}>
-              <div className="flex flex-col gap-2">
-                <div>{queryPokemon.data?.shortDescription}</div>
-                <div>height</div>
-                <div>width</div>
-              </div>
+              <About
+                description={species?.shortDescription || ''}
+                pokemon={selectedForm}
+              />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Stats" key={2}>
               <Stats data={selectedForm.stats} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Evolutions" key={3}>
+              <Evolutions data={species?.evolutions || []} />
             </Tabs.TabPane>
           </Tabs>
         </div>
