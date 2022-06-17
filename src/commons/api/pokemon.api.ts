@@ -1,5 +1,6 @@
 import { graphQL } from '../helpers/http-request';
-import { TPokemonDetail, TPokemonList } from '../types';
+import { parsePokemon } from '../helpers/pokemon';
+import { TPokemonDetail, TPokemonList, TSpecies } from '../types';
 
 type TFetchPokemonApi = {
   limit: number;
@@ -85,111 +86,471 @@ export const fetchPokemonsApi = async (
 
 export const getPokemonDetailApi = async (
   name: string
-): Promise<TPokemonDetail | null> => {
+): Promise<TSpecies | null> => {
   try {
-    const fakePokemonDetail = {
-      id: 1,
-      name: 'bulbasaur',
-      shortDescription:
-        'A strange seed was\nplanted on its\nback at birth.\fThe plant sprouts\nand grows with\nthis POKéMON.',
-      height: 7,
-      weight: 69,
-      types: [
-        {
-          id: 12,
-          name: 'grass',
-        },
-        {
-          id: 4,
-          name: 'poison',
-        },
-      ],
-      stats: [
-        {
-          name: 'hp',
-          baseStat: 45,
-        },
-        {
-          name: 'attack',
-          baseStat: 49,
-        },
-        {
-          name: 'defense',
-          baseStat: 49,
-        },
-        {
-          name: 'special-attack',
-          baseStat: 65,
-        },
-        {
-          name: 'special-defense',
-          baseStat: 65,
-        },
-        {
-          name: 'speed',
-          baseStat: 45,
-        },
-      ],
-      abilities: [
-        {
-          name: 'overgrow',
-          shortEffect:
-            'Strengthens grass moves to inflict 1.5× damage at 1/3 max HP or less.',
-        },
-        {
-          name: 'chlorophyll',
-          shortEffect: 'Doubles Speed during strong sunlight.',
-        },
-      ],
-      evolutions: [
-        {
-          id: 1,
-          name: 'bulbasaur',
-          types: [
-            {
-              id: 12,
-              name: 'grass',
-            },
-            {
-              id: 4,
-              name: 'poison',
-            },
-          ],
-        },
-        {
-          id: 2,
-          name: 'ivysaur',
-          types: [
-            {
-              id: 12,
-              name: 'grass',
-            },
-            {
-              id: 4,
-              name: 'poison',
-            },
-          ],
-        },
-        {
-          id: 3,
-          name: 'venusaur',
-          types: [
-            {
-              id: 12,
-              name: 'grass',
-            },
-            {
-              id: 4,
-              name: 'poison',
-            },
-          ],
-        },
-      ],
-    };
-    // return fakePokemonDetail;
+    // const speciesFake: any = {
+    //   name: 'venusaur',
+    //   id: 3,
+    //   flavorText: [
+    //     {
+    //       flavorText:
+    //         'The plant blooms\nwhen it is\nabsorbing solar\fenergy. It stays\non the move to\nseek sunlight.',
+    //     },
+    //   ],
+    //   pokemons: [
+    //     {
+    //       name: 'venusaur',
+    //       id: 3,
+    //       weight: 1000,
+    //       height: 20,
+    //       abilities: [
+    //         {
+    //           ability: {
+    //             id: 65,
+    //             name: 'overgrow',
+    //             abilityText: [
+    //               {
+    //                 id: 130,
+    //                 shortEffect:
+    //                   'Strengthens grass moves to inflict 1.5× damage at 1/3 max HP or less.',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           ability: {
+    //             id: 34,
+    //             name: 'chlorophyll',
+    //             abilityText: [
+    //               {
+    //                 id: 68,
+    //                 shortEffect: 'Doubles Speed during strong sunlight.',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //       ],
+    //       stats: [
+    //         {
+    //           baseStat: 80,
+    //           stat: {
+    //             name: 'hp',
+    //             statName: [
+    //               {
+    //                 name: 'HP',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           baseStat: 82,
+    //           stat: {
+    //             name: 'attack',
+    //             statName: [
+    //               {
+    //                 name: 'Attack',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           baseStat: 83,
+    //           stat: {
+    //             name: 'defense',
+    //             statName: [
+    //               {
+    //                 name: 'Defense',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           baseStat: 100,
+    //           stat: {
+    //             name: 'special-attack',
+    //             statName: [
+    //               {
+    //                 name: 'Special Attack',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           baseStat: 100,
+    //           stat: {
+    //             name: 'special-defense',
+    //             statName: [
+    //               {
+    //                 name: 'Special Defense',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           baseStat: 80,
+    //           stat: {
+    //             name: 'speed',
+    //             statName: [
+    //               {
+    //                 name: 'Speed',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //       ],
+    //       types: [
+    //         {
+    //           type: {
+    //             id: 12,
+    //             name: 'grass',
+    //           },
+    //         },
+    //         {
+    //           type: {
+    //             id: 4,
+    //             name: 'poison',
+    //           },
+    //         },
+    //       ],
+    //     },
+    //     {
+    //       name: 'venusaur-mega',
+    //       id: 10033,
+    //       weight: 1555,
+    //       height: 24,
+    //       abilities: [
+    //         {
+    //           ability: {
+    //             id: 47,
+    //             name: 'thick-fat',
+    //             abilityText: [
+    //               {
+    //                 id: 94,
+    //                 shortEffect: 'Halves damage from fire and ice moves.',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //       ],
+    //       stats: [
+    //         {
+    //           baseStat: 80,
+    //           stat: {
+    //             name: 'hp',
+    //             statName: [
+    //               {
+    //                 name: 'HP',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           baseStat: 100,
+    //           stat: {
+    //             name: 'attack',
+    //             statName: [
+    //               {
+    //                 name: 'Attack',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           baseStat: 123,
+    //           stat: {
+    //             name: 'defense',
+    //             statName: [
+    //               {
+    //                 name: 'Defense',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           baseStat: 122,
+    //           stat: {
+    //             name: 'special-attack',
+    //             statName: [
+    //               {
+    //                 name: 'Special Attack',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           baseStat: 120,
+    //           stat: {
+    //             name: 'special-defense',
+    //             statName: [
+    //               {
+    //                 name: 'Special Defense',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           baseStat: 80,
+    //           stat: {
+    //             name: 'speed',
+    //             statName: [
+    //               {
+    //                 name: 'Speed',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //       ],
+    //       types: [
+    //         {
+    //           type: {
+    //             id: 12,
+    //             name: 'grass',
+    //           },
+    //         },
+    //         {
+    //           type: {
+    //             id: 4,
+    //             name: 'poison',
+    //           },
+    //         },
+    //       ],
+    //     },
+    //     {
+    //       name: 'venusaur-gmax',
+    //       id: 10195,
+    //       weight: 10000,
+    //       height: 240,
+    //       abilities: [
+    //         {
+    //           ability: {
+    //             id: 65,
+    //             name: 'overgrow',
+    //             abilityText: [
+    //               {
+    //                 id: 130,
+    //                 shortEffect:
+    //                   'Strengthens grass moves to inflict 1.5× damage at 1/3 max HP or less.',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           ability: {
+    //             id: 34,
+    //             name: 'chlorophyll',
+    //             abilityText: [
+    //               {
+    //                 id: 68,
+    //                 shortEffect: 'Doubles Speed during strong sunlight.',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //       ],
+    //       stats: [
+    //         {
+    //           baseStat: 80,
+    //           stat: {
+    //             name: 'hp',
+    //             statName: [
+    //               {
+    //                 name: 'HP',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           baseStat: 82,
+    //           stat: {
+    //             name: 'attack',
+    //             statName: [
+    //               {
+    //                 name: 'Attack',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           baseStat: 83,
+    //           stat: {
+    //             name: 'defense',
+    //             statName: [
+    //               {
+    //                 name: 'Defense',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           baseStat: 100,
+    //           stat: {
+    //             name: 'special-attack',
+    //             statName: [
+    //               {
+    //                 name: 'Special Attack',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           baseStat: 100,
+    //           stat: {
+    //             name: 'special-defense',
+    //             statName: [
+    //               {
+    //                 name: 'Special Defense',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         {
+    //           baseStat: 80,
+    //           stat: {
+    //             name: 'speed',
+    //             statName: [
+    //               {
+    //                 name: 'Speed',
+    //               },
+    //             ],
+    //           },
+    //         },
+    //       ],
+    //       types: [
+    //         {
+    //           type: {
+    //             id: 12,
+    //             name: 'grass',
+    //           },
+    //         },
+    //         {
+    //           type: {
+    //             id: 4,
+    //             name: 'poison',
+    //           },
+    //         },
+    //       ],
+    //     },
+    //   ],
+    //   evolutions: {
+    //     species: [
+    //       {
+    //         evolvesFromSpeciesId: null,
+    //         name: 'bulbasaur',
+    //         id: 1,
+    //         pokemons: [
+    //           {
+    //             name: 'bulbasaur',
+    //             id: 1,
+    //             types: [
+    //               {
+    //                 type: {
+    //                   id: 12,
+    //                   name: 'grass',
+    //                 },
+    //               },
+    //               {
+    //                 type: {
+    //                   id: 4,
+    //                   name: 'poison',
+    //                 },
+    //               },
+    //             ],
+    //           },
+    //         ],
+    //       },
+    //       {
+    //         evolvesFromSpeciesId: 1,
+    //         name: 'ivysaur',
+    //         id: 2,
+    //         pokemons: [
+    //           {
+    //             name: 'ivysaur',
+    //             id: 2,
+    //             types: [
+    //               {
+    //                 type: {
+    //                   id: 12,
+    //                   name: 'grass',
+    //                 },
+    //               },
+    //               {
+    //                 type: {
+    //                   id: 4,
+    //                   name: 'poison',
+    //                 },
+    //               },
+    //             ],
+    //           },
+    //         ],
+    //       },
+    //       {
+    //         evolvesFromSpeciesId: 2,
+    //         name: 'venusaur',
+    //         id: 3,
+    //         pokemons: [
+    //           {
+    //             name: 'venusaur',
+    //             id: 3,
+    //             types: [
+    //               {
+    //                 type: {
+    //                   id: 12,
+    //                   name: 'grass',
+    //                 },
+    //               },
+    //               {
+    //                 type: {
+    //                   id: 4,
+    //                   name: 'poison',
+    //                 },
+    //               },
+    //             ],
+    //           },
+    //           {
+    //             name: 'venusaur-mega',
+    //             id: 10033,
+    //             types: [
+    //               {
+    //                 type: {
+    //                   id: 12,
+    //                   name: 'grass',
+    //                 },
+    //               },
+    //               {
+    //                 type: {
+    //                   id: 4,
+    //                   name: 'poison',
+    //                 },
+    //               },
+    //             ],
+    //           },
+    //           {
+    //             name: 'venusaur-gmax',
+    //             id: 10195,
+    //             types: [
+    //               {
+    //                 type: {
+    //                   id: 12,
+    //                   name: 'grass',
+    //                 },
+    //               },
+    //               {
+    //                 type: {
+    //                   id: 4,
+    //                   name: 'poison',
+    //                 },
+    //               },
+    //             ],
+    //           },
+    //         ],
+    //       },
+    //     ],
+    //   },
+    // };
+
     const query = `
     query {
-      species: pokemon_v2_pokemonspecies(where: {name: {_eq: "${name}"}}) {
+      species: pokemon_v2_pokemonspecies(limit: 1, where: {name: {_eq: "${name}"}}) {
         name
         id
         flavorText: pokemon_v2_pokemonspeciesflavortexts(where: {pokemon_v2_language: {name: {_eq: "en"}}}, limit: 1) {
@@ -214,6 +575,9 @@ export const getPokemonDetailApi = async (
             baseStat: base_stat
             stat: pokemon_v2_stat {
               name
+              statName: pokemon_v2_statnames(where: {pokemon_v2_language: {name: {_eq: "en"}}}, limit: 1) {
+                name
+              }
             }
           }
           types:pokemon_v2_pokemontypes {
@@ -247,30 +611,15 @@ export const getPokemonDetailApi = async (
     const response = await graphQL(query);
 
     const species = response.data?.data?.species[0] || null;
-    console.log('species', species);
+    // const species = speciesFake;
 
     if (species) {
       const { id, name, flavorText, pokemons, evolutions } = species;
-      const [pokemon] = pokemons;
 
-      const data: TPokemonDetail = {
+      const data = {
         id,
         name,
         shortDescription: flavorText[0]?.flavorText || '',
-        height: pokemon.height,
-        weight: pokemon.weight,
-        types: pokemon.types.map(({ type }: any) => ({
-          id: type.id,
-          name: type.name,
-        })),
-        stats: pokemon.stats.map(({ baseStat, stat }: any) => ({
-          name: stat?.name || '',
-          baseStat: baseStat,
-        })),
-        abilities: pokemon.abilities.map(({ ability }: any) => ({
-          name: ability.name,
-          shortEffect: ability.abilityText[0]?.shortEffect,
-        })),
         evolutions: evolutions.species.map(({ id, name, pokemons }: any) => ({
           id,
           name,
@@ -281,6 +630,9 @@ export const getPokemonDetailApi = async (
               }))
             : [],
         })),
+        pokemons: pokemons.map((apiDataPokemon: any) =>
+          parsePokemon(apiDataPokemon)
+        ),
       };
 
       return Promise.resolve(data);

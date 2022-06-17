@@ -1,5 +1,6 @@
 import hexToRgba from 'hex-to-rgba';
 import { POKEMON_TYPE_COLOR } from '../constants/pokemon.constant';
+import { TPokemonDetail } from '../types';
 
 export const getColorFromTypeName = (typeName: string): string => {
   return typeName in POKEMON_TYPE_COLOR
@@ -31,4 +32,25 @@ export const getArtwork = (id: number) => {
 
 export const getIDNumber = (id: number): string => {
   return String(id).padStart(3, '0');
+};
+
+export const parsePokemon = (apiDataPokemon: any): TPokemonDetail => {
+  return {
+    id: apiDataPokemon.id,
+    name: apiDataPokemon.name,
+    height: apiDataPokemon.height,
+    weight: apiDataPokemon.weight,
+    types: apiDataPokemon.types.map(({ type }: any) => ({
+      id: type.id,
+      name: type.name,
+    })),
+    stats: apiDataPokemon.stats.map(({ baseStat, stat }: any) => ({
+      name: stat.statName[0]?.name || stat.name || '',
+      baseStat: baseStat,
+    })),
+    abilities: apiDataPokemon.abilities.map(({ ability }: any) => ({
+      name: ability.name,
+      shortEffect: ability.abilityText[0]?.shortEffect || '',
+    })),
+  };
 };
