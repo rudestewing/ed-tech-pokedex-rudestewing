@@ -54,9 +54,14 @@ const ComparisonPage: React.FC = () => {
           <div className="flex gap-2 justify-between">
             {data.map((pokemon) => {
               return (
-                <div className="flex justify-center w-1/2">
-                  <div style={{ width: '80%', height: 'auto' }}>
-                    <img src={getArtwork(pokemon.id)} alt="" />
+                <div className="w-1/2">
+                  <div className="flex justify-center">
+                    <div style={{ width: '80%', height: 'auto' }}>
+                      <img src={getArtwork(pokemon.id)} alt="" />
+                    </div>
+                  </div>
+                  <div className="text-lg font-semibold text-center">
+                    {pokemon.name}
                   </div>
                 </div>
               );
