@@ -1,17 +1,15 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { TStats } from '../../../commons/types';
 
 type TProps = {
   data: TStats;
 };
 
-const Stats: React.FC<TProps> = ({ data }) => {
-  const total = useMemo<number>(() => {
-    return data.reduce((a, b) => a + b.baseStat, 0);
-  }, [data]);
+const MAX_BASE_STATS = 255;
 
+const Stats: React.FC<TProps> = ({ data }) => {
   const getPercentage = (value: number) => {
-    return (value / total) * 100;
+    return (value / MAX_BASE_STATS) * 100;
   };
 
   const progressBar = (percentage: number = 0) => {
